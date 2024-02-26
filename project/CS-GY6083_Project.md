@@ -13,11 +13,11 @@ For security purposes, the password for the DB will be stored as an environment 
 ## Project Structure
 The project will be structured as follows:
 - A main file that will contain the main logic of the application
-  - A file that will contain the database schema
-  - A file that will contain the database connection logic
-  - A file that will contain the logic to interact with the database
-  - A file that will contain the logic to interact with the user
-  - A file that will contain the logic to handle the environment variables
+- A file that will contain the database schema
+- A file that will contain the database connection logic
+- A file that will contain the logic to interact with the database
+- A file that will contain the logic to interact with the user
+- A file that will contain the logic to handle the environment variables
 
 ## Database Schema
 ### Schema Name: album_information
@@ -31,43 +31,43 @@ The database will contain 7 tables. The tables will be related to each other in 
 - Table 6: album_to_tracks
 - Table 7: record_sales
 
-### record_albums schema
+### record_albums table
 - album_id: int
 - album_name: varchar
 - album_release_date: date
 
-### record_artists schema
+### record_artists table
 - artist_id: int
 - artist_name: varchar
 
-### record_tracks schema
+### record_tracks table
 - track_id: int
 - track_name: varchar
 - track_genre_id: int
 
-### record_genres schema
+### record_genres table
 - genre_id: int
 - genre_name: varchar
 - genre_description: varchar
 
-### album_to_artists schema
+### album_to_artists table
 - album_artist_id: int
 - album_id: int
 - artist_id: int
 
-### album_to_tracks schema
+### album_to_tracks table
 - album_track_id: int
 - album_id: int
 - track_id: int
 - track_number: int
 
-### record_sales schema
+### record_sales table
 - sale_id: int
 - sale_album_id: int
 - sale_date: date
 - sale_quantity: int
 - sale_price: decimal
-
+[CS-GY6083_Project.md](CS-GY6083_Project.md)
 ### Entity Relationship Diagram
 ```mermaid
 erDiagram
@@ -116,4 +116,67 @@ erDiagram
     record_tracks ||--|| record_genres : "is_of"
     record_albums ||--|{ record_sales : "has sold"
 
+```
+
+## DDL for album_information database
+```sql
+CREATE DATABASE album_information;
+
+USE album_information;
+
+CREATE TABLE record_albums (
+    album_id int NOT NULL AUTO_INCREMENT,
+    album_name varchar(255) NOT NULL,
+    album_release_date date NOT NULL,
+    PRIMARY KEY (album_id)
+);
+
+CREATE TABLE record_artists (
+    artist_id int NOT NULL AUTO_INCREMENT,
+    artist_name varchar(255) NOT NULL,
+    PRIMARY KEY (artist_id)
+);
+
+CREATE TABLE record_tracks (
+    track_id int NOT NULL AUTO_INCREMENT,
+    track_name varchar(255) NOT NULL,
+    track_genre_id int NOT NULL,
+    PRIMARY KEY (track_id
+);
+
+CREATE TABLE record_genres (
+    genre_id int NOT NULL AUTO_INCREMENT,
+    genre_name varchar(255) NOT NULL,
+    genre_description varchar(255) NOT NULL,
+    PRIMARY KEY (genre_id)
+);
+
+CREATE TABLE album_to_artists (
+    album_artist_id int NOT NULL AUTO_INCREMENT,
+    album_id int NOT NULL,
+    artist_id int NOT NULL,
+    PRIMARY KEY (album_artist_id),
+    FOREIGN KEY (album_id) REFERENCES record_albums(album_id),
+    FOREIGN KEY (artist_id) REFERENCES record_artists(artist_id)
+);
+
+CREATE TABLE album_to_tracks (
+    album_track_id int NOT NULL AUTO_INCREMENT,
+    album_id int NOT NULL,
+    track_id int NOT NULL,
+    track_number int NOT NULL,
+    PRIMARY KEY (album_track_id),
+    FOREIGN KEY (album_id) REFERENCES record_albums(album_id),
+    FOREIGN KEY (track_id) REFERENCES record_tracks(track_id)
+);
+
+CREATE TABLE record_sales (
+    sale_id int NOT NULL AUTO_INCREMENT,
+    sale_album_id int NOT NULL,
+    sale_date date NOT NULL,
+    sale_quantity int NOT NULL,
+    sale_price decimal(10,2) NOT NULL,
+    PRIMARY KEY (sale_id),
+    FOREIGN KEY (sale_album_id) REFERENCES record_albums(album_id)
+);
 ```
