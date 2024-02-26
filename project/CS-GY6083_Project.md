@@ -27,17 +27,14 @@ The database will contain 7 tables. The tables will be related to each other in 
 - Table 2: record_artists
 - Table 3: record_tracks
 - Table 4: record_genres
-- Table 5: record_labels
-- Table 6: record_producers
+- Table 5: album_to_artists
+- Table 6: album_to_tracks
 - Table 7: record_sales
 
 ### record_albums schema
 - album_id: int
 - album_name: varchar
 - album_release_date: date
-- album_artist_id: int
-- album_label_id: int
-- album_producer_id: int
 
 ### record_artists schema
 - artist_id: int
@@ -46,7 +43,6 @@ The database will contain 7 tables. The tables will be related to each other in 
 ### record_tracks schema
 - track_id: int
 - track_name: varchar
-- track_album_id: int
 - track_genre_id: int
 
 ### record_genres schema
@@ -54,14 +50,16 @@ The database will contain 7 tables. The tables will be related to each other in 
 - genre_name: varchar
 - genre_description: varchar
 
-### record_labels schema
-- label_id: int
-- label_name: varchar
-- label_description: varchar
+### album_to_artists schema
+- album_artist_id: int
+- album_id: int
+- artist_id: int
 
-### record_producers schema
-- producer_id: int
-- producer_name: varchar
+### album_to_tracks schema
+- album_track_id: int
+- album_id: int
+- track_id: int
+- track_number: int
 
 ### record_sales schema
 - sale_id: int
@@ -77,9 +75,6 @@ erDiagram
         album_id int
         album_name varchar
         album_release_date date
-        album_artist_id int
-        album_label_id int
-        album_producer_id int
     }
     record_artists {
         artist_id int
@@ -88,7 +83,6 @@ erDiagram
     record_tracks {
         track_id int
         track_name varchar
-        track_album_id int
         track_genre_id int
     }
     record_genres {
@@ -96,14 +90,16 @@ erDiagram
         genre_name varchar
         genre_description varchar
     }
-    record_labels {
-        label_id int
-        label_name varchar
-        label_description varchar
+    album_to_artists {
+        album_artist_id int
+        album_id int
+        artist_id int
     }
-    record_producers {
-        producer_id int
-        producer_name varchar
+    album_to_tracks {
+        album_track_id int
+        album_id int
+        track_id int
+        track_number int
     }
     record_sales {
         sale_id int
@@ -112,10 +108,12 @@ erDiagram
         sale_quantity int
         sale_price decimal
     }
-    record_albums ||--|| record_artists : "album_artist_id"
-    record_albums ||--|| record_labels : "album_label_id"
-    record_albums ||--|| record_producers : "album_producer_id"
-    record_tracks ||--|| record_albums : "track_album_id"
-    record_tracks ||--|| record_genres : "track_genre_id"
-    record_sales ||--|| record_albums : "sale_album_id"
+
+    record_albums ||--|{ album_to_artists : "created_by"
+    album_to_artists ||--o{ record_artists : "created"
+    record_albums ||--|| album_to_tracks : "has_song"
+    album_to_tracks ||--o| record_tracks : "is on album"
+    record_tracks ||--|| record_genres : "is_of"
+    record_albums ||--|{ record_sales : "has sold"
+
 ```
