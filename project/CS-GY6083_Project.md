@@ -43,7 +43,7 @@ The database will contain 7 tables. The tables will be related to each other in 
 ### record_tracks table
 - track_id: int
 - track_name: varchar
-- track_genre_id: int
+- genre_id: int
 
 ### record_genres table
 - genre_id: int
@@ -68,6 +68,7 @@ The database will contain 7 tables. The tables will be related to each other in 
 - sale_quantity: int
 - sale_price: decimal
 [CS-GY6083_Project.md](CS-GY6083_Project.md)
+
 ### Entity Relationship Diagram
 ```mermaid
 erDiagram
@@ -83,7 +84,7 @@ erDiagram
     record_tracks {
         track_id int
         track_name varchar
-        track_genre_id int
+        genre_id int
     }
     record_genres {
         genre_id int
@@ -140,8 +141,8 @@ CREATE TABLE record_artists (
 CREATE TABLE record_tracks (
     track_id int NOT NULL AUTO_INCREMENT,
     track_name varchar(255) NOT NULL,
-    track_genre_id int NOT NULL,
-    PRIMARY KEY (track_id
+    genre_id int NOT NULL,
+    PRIMARY KEY (track_id)
 );
 
 CREATE TABLE record_genres (
