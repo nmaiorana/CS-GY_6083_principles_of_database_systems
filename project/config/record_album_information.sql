@@ -22,14 +22,14 @@ CREATE TABLE record_artists (
 CREATE TABLE record_tracks (
     track_id int NOT NULL AUTO_INCREMENT,
     track_name varchar(255) NOT NULL,
-    track_genre_id int NOT NULL,
+    genre_id int NOT NULL,
     PRIMARY KEY (track_id)
 );
 
 CREATE TABLE record_genres (
     genre_id int NOT NULL AUTO_INCREMENT,
     genre_name varchar(255) NOT NULL,
-    genre_description varchar(255) NOT NULL,
+    genre_description varchar(512) NOT NULL,
     PRIMARY KEY (genre_id)
 );
 
@@ -61,3 +61,62 @@ CREATE TABLE record_sales (
     PRIMARY KEY (sale_id),
     FOREIGN KEY (sale_album_id) REFERENCES record_albums(album_id)
 );
+
+CREATE VIEW album_information AS
+    SELECT
+        record_albums.album_name,
+        record_albums.album_release_date,
+        record_artists.artist_name,
+        record_genres.genre_name,
+        album_to_tracks.track_number,
+        record_tracks.track_name
+
+    FROM
+        record_albums
+    JOIN
+        album_to_artists ON record_albums.album_id = album_to_artists.album_id
+    JOIN
+        record_artists ON album_to_artists.artist_id = record_artists.artist_id
+    JOIN
+        album_to_tracks ON record_albums.album_id = album_to_tracks.album_id
+    JOIN
+        record_tracks ON album_to_tracks.track_id = record_tracks.track_id
+    JOIN
+        record_genres ON record_tracks.genre_id = record_genres.genre_id;
+
+INSERT INTO record_albums (album_name, album_release_date) VALUES
+    ('The Dark Side of the Moon', '1973-03-01');
+
+INSERT INTO record_artists (artist_name) VALUES
+    ('Pink Floyd');
+
+INSERT INTO record_genres (genre_name, genre_description) VALUES
+    ('Rock', 'Rock music');
+
+INSERT INTO record_tracks (track_name, genre_id) VALUES
+    ('Speak to Me', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Breathe', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('On the Run', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Time', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('The Great Gig in the Sky', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Money', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Us and Them', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Any Colour You Like', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Brain Damage', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Eclipse', (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock'));
+
+INSERT INTO album_to_artists (album_id, artist_id) VALUES
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'));
+
+INSERT INTO album_to_tracks (album_id, track_id, track_number) VALUES
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Speak to Me'), 1),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Breathe'), 2),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'On the Run'), 3),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Time'), 4),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'The Great Gig in the Sky'), 5),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Money'), 6),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Us and Them'), 7),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Any Colour You Like'), 8),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Brain Damage'), 9),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Eclipse'), 10);
+
