@@ -86,6 +86,7 @@ CREATE VIEW album_information_details AS
 
         RECORD_ARTISTS.artist_name,
         record_genres.genre_name,
+        RECORD_LABELS.record_label_name,
         RECORD_TRACKS.track_number,
         RECORD_TRACKS.track_name,
         RECORD_ALBUMS.album_release_date
