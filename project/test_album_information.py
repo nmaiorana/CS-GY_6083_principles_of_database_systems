@@ -12,7 +12,7 @@ try:
     cursor.execute(query)
     albums_table = cursor.fetchall()
     albums_df = pd.DataFrame(albums_table, columns=cursor.column_names)
-    albums_df = albums_df.set_index(['album_name', 'track_number'])
+    albums_df = albums_df.set_index(['album_name'])
     print(albums_df)
 except mysql.connector.Error as err:
     if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
