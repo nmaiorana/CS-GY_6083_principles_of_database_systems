@@ -64,7 +64,7 @@ CREATE TABLE RECORD_SALES (
     sale_quantity int,
     unit_sale_price decimal,
     PRIMARY KEY (sale_id),
-    FOREIGN KEY (sale_id) REFERENCES RECORD_ALBUMS(album_id)
+    FOREIGN KEY (album_id) REFERENCES RECORD_ALBUMS(album_id)
 );
 
 CREATE VIEW album_information AS
@@ -112,7 +112,27 @@ INSERT INTO record_labels (record_label_name) VALUES
     ('Harvest Capitol Records');
 
 INSERT INTO record_albums (album_name, album_release_date, artist_id, genre_id, record_label_id) VALUES
-    ('The Dark Side of the Moon', '1973-03-01', (SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock'), (SELECT record_label_id FROM record_labels WHERE record_label_name = 'Harvest Capitol Records'));
+    ('The Dark Side of the Moon', '1973-03-01',
+     (SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'),
+     (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock'),
+     (SELECT record_label_id FROM record_labels WHERE record_label_name = 'Harvest Capitol Records'));
+
+INSERT INTO record_sales(album_id, sale_date, sale_quantity, unit_sale_price) VALUES
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1973-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1974-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1975-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1976-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1977-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1978-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1979-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1980-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1981-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1982-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1983-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1984-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1985-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1986-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1987-01-01', 1000000, 10.00);
 
 INSERT INTO record_tracks (track_name, track_number, genre_id) VALUES
     ('Speak to Me', 1, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
@@ -126,7 +146,6 @@ INSERT INTO record_tracks (track_name, track_number, genre_id) VALUES
     ('Brain Damage', 9, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
     ('Eclipse', 10, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock'));
 
-
 INSERT INTO album_to_tracks (album_id, track_id) VALUES
     ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Speak to Me')),
     ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Breathe (In the Air)')),
@@ -139,4 +158,48 @@ INSERT INTO album_to_tracks (album_id, track_id) VALUES
     ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Brain Damage')),
     ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), (SELECT track_id FROM record_tracks WHERE track_name = 'Eclipse'));
 
+INSERT INTO record_artists (artist_name) VALUES
+    ('Boston');
 
+INSERT INTO record_labels (record_label_name) VALUES
+    ('Epic Records');
+
+INSERT INTO record_albums (album_name, album_release_date, artist_id, genre_id, record_label_id) VALUES
+    ('Boston', '1976-08-25',
+     (SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'),
+     (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock'),
+     (SELECT record_label_id FROM record_labels WHERE record_label_name = 'Epic Records'));
+
+INSERT INTO record_sales(album_id, sale_date, sale_quantity, unit_sale_price) VALUES
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1976-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1977-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1978-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1979-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1980-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1981-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1982-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1983-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1984-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1985-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1986-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1987-01-01', 1000000, 10.00);
+
+INSERT INTO record_tracks (track_name, track_number, genre_id) VALUES
+    ('More Than a Feeling', 1, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Peace of Mind', 2, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Foreplay/Long Time', 3, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Rock & Roll Band', 4, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Smokin', 5, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Hitch a Ride', 6, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Something About You', 7, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
+    ('Let Me Take You Home Tonight', 8, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock'));
+
+INSERT INTO album_to_tracks (album_id, track_id) VALUES
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), (SELECT track_id FROM record_tracks WHERE track_name = 'More Than a Feeling')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), (SELECT track_id FROM record_tracks WHERE track_name = 'Peace of Mind')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), (SELECT track_id FROM record_tracks WHERE track_name = 'Foreplay/Long Time')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), (SELECT track_id FROM record_tracks WHERE track_name = 'Rock & Roll Band')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), (SELECT track_id FROM record_tracks WHERE track_name = 'Smokin')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), (SELECT track_id FROM record_tracks WHERE track_name = 'Hitch a Ride')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), (SELECT track_id FROM record_tracks WHERE track_name = 'Something About You')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), (SELECT track_id FROM record_tracks WHERE track_name = 'Let Me Take You Home Tonight'));
