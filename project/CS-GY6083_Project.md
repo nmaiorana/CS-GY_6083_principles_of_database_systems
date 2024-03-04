@@ -8,50 +8,6 @@ The project will construct a database with 7 tables. The tables will be related 
 
 ## Project Details
 For my project I will construct a database to store information about record albums. The record album database will have a main table which lists the following features of a record album:
-### Record Album Table:
-- Album ID
-- Name of the album
-- Date the album was released
-- Artist that performed on the album
-- Genre for the album
-- Record label the album was released under
-
-### Record Album Tracks Table
-Each album will have songs or tracks associated with it. The tracks will contain the following information:
-- Name of the track
-- Song number for the track
-- Genre of the track
-
-### Record Album Sales Table:
-To track sales for each album we will use a record album sales table:
-- Sales ID
-- Record Album ID
-- Sales Date
-- Sales Quantity
-- Unit Sales Price
-
-## Supporting Tables
-
-### Album to Tracks Table
-To associate each record album with the songs on that album, a relationship table will be used:
-- Album ID
-- Track ID
-
-### Artists Table
-Supporting tables for the database will be:
-Artist Table:
-- Artist ID
-- Artist Name
-
-### Genres Table
-Genre Table:
-- Genre ID
-- Genre Name
-- Genre Description
-
-### Record Label Table
-- Record Label ID
-- Record Label Name
 
 ## Native Language
 Python will be used to build the application and the database will be a MySQL database. The application will use the mysql library to interact with the database.
@@ -60,9 +16,11 @@ For security purposes, the password for the DB will be stored as an environment 
 
 ## Project Structure
 The project will be structured as follows:
+- ER Diagram from Record Album Database
 - DLL
 - Python Scripts for utilities
 - Python Classes for Business Object definitions
+- UI Classes to interact with the user
 
 ## Database Schema
 
@@ -70,23 +28,24 @@ The project will be structured as follows:
 ### Entity Relationship Diagram
 ```mermaid
 erDiagram
-    RECORD_ALBUMS {
-        album_id int
-        album_name varchar(255)
-        album_release_date date
-        artist_id int
-        genre_id int
-        record_label_id int
-    }
+
     RECORD_ARTISTS {
-        artist_id int
+        artist_id int PK
         artist_name varchar(255)
     }
+    GROUP_MEMBERS {
+        member_id int
+        member_name varchar(255)
+    }
+    ARTIST_TO_MEMBERS {
+        member_id int FK
+        artist_id int FK
+    }
     RECORD_TRACKS {
-        track_id int
+        track_id int PK
         track_name varchar(255)
         track_number int
-        genre_id int
+        genre_id int FK
     }
     RECORD_GENRES {
         genre_id int
@@ -96,6 +55,14 @@ erDiagram
     RECORD_LABELS {
         record_label_id int
         record_label_name varchar(255)
+    }
+    RECORD_ALBUMS {
+        album_id int PK
+        album_name varchar(255)
+        album_release_date date
+        artist_id int FK
+        genre_id int FK
+        record_label_id int
     }
     ALBUM_TO_TRACKS {
         album_track_id int
@@ -111,6 +78,8 @@ erDiagram
     }
 
     RECORD_ALBUMS ||--|| RECORD_ARTISTS : "Artist"
+    RECORD_ARTISTS ||--|| ARTIST_TO_MEMBERS : "Members"
+    GROUP_MEMBERS ||--|| ARTIST_TO_MEMBERS : "Members"
     RECORD_ALBUMS ||--|| RECORD_GENRES : "Genre"
     RECORD_ALBUMS ||--|| RECORD_LABELS : "Record Label"
     RECORD_ALBUMS ||--|| ALBUM_TO_TRACKS : "Tracks"
@@ -143,6 +112,19 @@ CREATE TABLE RECORD_ARTISTS (
     artist_id int NOT NULL AUTO_INCREMENT,
     artist_name varchar(255),
     PRIMARY KEY (artist_id)
+);
+
+CREATE TABLE GROUP_MEMBERS (
+    member_id int NOT NULL AUTO_INCREMENT,
+    member_name varchar(255),
+    PRIMARY KEY (member_id)
+);
+
+CREATE TABLE MEMBERS_TO_ARTISTS (
+    member_id int NOT NULL AUTO_INCREMENT,
+    artist_id int,
+    PRIMARY KEY (member_id),
+    FOREIGN KEY (artist_id) REFERENCES RECORD_ARTISTS(artist_id)
 );
 
 CREATE TABLE RECORD_TRACKS (

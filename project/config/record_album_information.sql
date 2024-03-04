@@ -14,6 +14,21 @@ CREATE TABLE RECORD_ARTISTS (
     PRIMARY KEY (artist_id)
 );
 
+CREATE TABLE GROUP_MEMBERS (
+    member_id int NOT NULL AUTO_INCREMENT,
+    member_name varchar(255),
+    PRIMARY KEY (member_id)
+);
+
+CREATE TABLE MEMBERS_TO_ARTISTS (
+    members_to_artists_id int NOT NULL AUTO_INCREMENT,
+    member_id int,
+    artist_id int,
+    PRIMARY KEY (members_to_artists_id),
+    FOREIGN KEY (member_id) REFERENCES GROUP_MEMBERS(member_id),
+    FOREIGN KEY (artist_id) REFERENCES RECORD_ARTISTS(artist_id)
+);
+
 CREATE TABLE RECORD_TRACKS (
     track_id int NOT NULL AUTO_INCREMENT,
     track_name varchar(255),
@@ -90,7 +105,6 @@ CREATE VIEW album_information_details AS
         RECORD_TRACKS.track_number,
         RECORD_TRACKS.track_name,
         RECORD_ALBUMS.album_release_date
-
     FROM
         RECORD_ALBUMS
     JOIN RECORD_ARTISTS ON RECORD_ALBUMS.artist_id = RECORD_ARTISTS.artist_id
@@ -101,9 +115,32 @@ CREATE VIEW album_information_details AS
 ORDER BY
     RECORD_ALBUMS.album_name, RECORD_TRACKS.track_number;
 
+CREATE VIEW band_members AS
+    SELECT
+        RECORD_ARTISTS.artist_name,
+        GROUP_MEMBERS.member_name
+    FROM
+        RECORD_ARTISTS
+    JOIN MEMBERS_TO_ARTISTS ON RECORD_ARTISTS.artist_id = MEMBERS_TO_ARTISTS.artist_id
+    JOIN GROUP_MEMBERS ON MEMBERS_TO_ARTISTS.member_id = GROUP_MEMBERS.member_id;
+
 
 INSERT INTO record_artists (artist_name) VALUES
     ('Pink Floyd');
+
+INSERT INTO group_members (member_name) VALUES
+    ('Syd Barrett'),
+    ('Roger Waters'),
+    ('Richard Wright'),
+    ('Nick Mason'),
+    ('David Gilmour');
+
+INSERT INTO members_to_artists (artist_id, member_id) VALUES
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'Syd Barrett')),
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'Roger Waters')),
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'Richard Wright')),
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'Nick Mason')),
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'David Gilmour'));
 
 INSERT INTO record_genres (genre_name, genre_description) VALUES
     ('Rock', 'Rock music');
@@ -160,6 +197,20 @@ INSERT INTO album_to_tracks (album_id, track_id) VALUES
 
 INSERT INTO record_artists (artist_name) VALUES
     ('Boston');
+
+INSERT INTO group_members (member_name) VALUES
+    ('Tom Scholz'),
+    ('Brad Delp'),
+    ('Barry Goudreau'),
+    ('Fran Sheehan'),
+    ('Sib Hashian');
+
+INSERT INTO members_to_artists (artist_id, member_id) VALUES
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Tom Scholz')),
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Brad Delp')),
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Barry Goudreau')),
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Fran Sheehan')),
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Sib Hashian'));
 
 INSERT INTO record_labels (record_label_name) VALUES
     ('Epic Records');
