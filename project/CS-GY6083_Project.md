@@ -40,6 +40,8 @@ erDiagram
     ARTIST_TO_MEMBERS {
         member_id int FK
         artist_id int FK
+        member_from_date date
+        member_to_date date
     }
     RECORD_TRACKS {
         track_id int PK
@@ -123,6 +125,8 @@ CREATE TABLE GROUP_MEMBERS (
 CREATE TABLE MEMBERS_TO_ARTISTS (
     member_id int NOT NULL AUTO_INCREMENT,
     artist_id int,
+    member_from_date date,
+    member_to_date date,
     PRIMARY KEY (member_id),
     FOREIGN KEY (artist_id) REFERENCES RECORD_ARTISTS(artist_id)
 );
