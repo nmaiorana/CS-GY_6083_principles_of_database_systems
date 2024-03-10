@@ -120,7 +120,9 @@ ORDER BY
 CREATE VIEW band_members AS
     SELECT
         RECORD_ARTISTS.artist_name,
-        GROUP_MEMBERS.member_name
+        GROUP_MEMBERS.member_name,
+        MEMBERS_TO_ARTISTS.member_from_date,
+        MEMBERS_TO_ARTISTS.member_to_date
     FROM
         RECORD_ARTISTS
     JOIN MEMBERS_TO_ARTISTS ON RECORD_ARTISTS.artist_id = MEMBERS_TO_ARTISTS.artist_id
