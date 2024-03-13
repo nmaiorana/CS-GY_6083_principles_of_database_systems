@@ -7,23 +7,11 @@ The project is to build an application that interfaces with a database to store 
 The project will construct a database with 7 tables. The tables will be related to each other in a way that makes sense for the data. The application will allow the user to interact with the database by adding, retrieving, updating and deleting data. The application will also allow the user to query the database for specific data.
 
 ## Project Details
-For my project I will construct a database to store information about record albums. The record album database will have a main table which lists the following features of a record album:
+For this project I will construct a database using MySQL to store information about record albums, the artists behind the album and the members of the recording group. This will utilize a 2-tier architecture using Python as the primary Language.
 
-## Native Language
-Python will be used to build the application and the database will be a MySQL database. The application will use the mysql library to interact with the database.
-
-For security purposes, the password for the DB will be stored as an environment variable.
-
-## Project Structure
-The project will be structured as follows:
-- ER Diagram from Record Album Database
-- DLL
-- Python Scripts for utilities
-- Python Classes for Business Object definitions
-- UI Classes to interact with the user
+I will construct business object classes to represent the data in Python using data classes. These classes will call on a utility class to interact with the Database. Lastly I will construct a series of UI classes to perform Create, Read, Update and Delete operations on one of the tables.
 
 ## Database Schema
-
 
 ### Entity Relationship Diagram
 ```mermaid
@@ -38,6 +26,7 @@ erDiagram
         member_name varchar(255)
     }
     ARTIST_TO_MEMBERS {
+        artist_to_members_id int PK
         member_id int FK
         artist_id int FK
         member_from_date date
