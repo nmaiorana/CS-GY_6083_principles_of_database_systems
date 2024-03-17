@@ -1,40 +1,33 @@
 # This python class will be used to interact with the database and hold the information for an record_label table data.
 
-import db_utils as dbu
-from dataclasses import dataclass
+from project.tools import db_utils as dbu
+from dataclasses import dataclass, field
+from sqlalchemy import Column, Integer, String, Table
+from sqlalchemy.orm import registry
+
+mapper_registry = registry()
 
 
 def read_record_label(record_label_id):
-    # Create a connection object
-    conn = dbu.connect_to_db()
-    cursor = conn.cursor()
-    cursor.execute(f"SELECT * FROM record_label WHERE record_label_id = '{record_label_id}'")
-    record_label_row = cursor.fetchone()
-    conn.close()
-    return record_label_row
+    prepared_statement = "SELECT * FROM record_labels WHERE record_label_id = %s"
+    record_label_row = dbu.read_one_row(prepared_statement, (record_label_id,))
+    return RecordLabel(record_label_row[0], record_label_row[1])
 
 
+def write_record_label(record_label_name: str):
+    prepared_statement = "INSERT INTO record_labels (record_label_name) VALUES (%s)"
+    dbu.write_one_row(prepared_statement, (record_label_name,))
+
+
+@mapper_registry.mapped
 @dataclass
 class RecordLabel:
-    record_label_id: int
+    __table__ = Table('record_labels', mapper_registry.metadata,
+                      Column('record_label_id', Integer, primary_key=True),
+                      Column('record_label_name', String))
+    record_label_id: int = field(init=False)
     record_label_name: str
 
-    def __init__(self, record_label_name):
-        self.record_label = record_label_name
 
-    def add_record_label(self):
-        # Create a connection object
-        conn = dbu.connect_to_db()
-        cursor = conn.cursor()
-        cursor.execute(f"INSERT INTO record_label (record_label) VALUES ('{self.record_label}')")
-        conn.commit()
-        conn.close()
-
-    def get_record_labels(self):
-        # Create a connection object
-        conn = dbu.connect_to_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM record_label")
-        record_labels = cursor.fetchall()
-        conn.close()
-        return record_labels
+if __name__ == '__main__':
+    print(f"Record label: {RecordLabel.from_db(1)}")
