@@ -122,6 +122,39 @@ CREATE VIEW band_members AS
 
 
 # Inserting data into the tables
+
+# Genres
+
+INSERT INTO record_genres (genre_name, genre_description) VALUES
+    ('Rock', 'Rock music'),
+    ('Pop', 'Pop music'),
+    ('Rap', 'Rap music'),
+    ('Country', 'Country music'),
+    ('Jazz', 'Jazz music'),
+    ('Classical', 'Classical music'),
+    ('Blues', 'Blues music'),
+    ('Reggae', 'Reggae music'),
+    ('Folk', 'Folk music'),
+    ('Electronic', 'Electronic music'),
+    ('Hip Hop', 'Hip Hop music'),
+    ('R&B', 'Rhythm and Blues music'),
+    ('Soul', 'Soul music'),
+    ('Funk', 'Funk music'),
+    ('Disco', 'Disco music'),
+    ('Samba', 'Samba music');
+
+# Record labels
+INSERT INTO record_labels (record_label_name) VALUES
+    ('Epic Records'),
+    ('Harvest Capitol Records'),
+    ('Atlantic Records'),
+    ('Columbia Records'),
+    ('RCA Records'),
+    ('Warner Bros. Records'),
+    ('Capitol Records'),
+    ('Virgin Records'),
+    ('Motown Records');
+
 # Pink Floyd: Dark Side of the Moon
 
 INSERT INTO record_artists (artist_name) VALUES
@@ -140,12 +173,6 @@ INSERT INTO members_to_artists (artist_id, member_id, member_from_date, member_t
     ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'Richard Wright'), '1965-01-01', '1980-01-01'),
     ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'Nick Mason'), '1965-01-01', '1995-01-01'),
     ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'David Gilmour'), '1968-01-01', '1995-01-01');
-
-INSERT INTO record_genres (genre_name, genre_description) VALUES
-    ('Rock', 'Rock music');
-
-INSERT INTO record_labels (record_label_name) VALUES
-    ('Harvest Capitol Records');
 
 INSERT INTO record_albums (name, release_date, artist_id, genre_id, record_label_id) VALUES
     ('The Dark Side of the Moon', '1973-03-01',
@@ -200,9 +227,6 @@ INSERT INTO members_to_artists (artist_id, member_id, member_from_date, member_t
     ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Barry Goudreau'), '1975-01-01', '1981-01-01'),
     ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Fran Sheehan'), '1975-01-01', '1986-01-01'),
     ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Sib Hashian'), '1975-01-01', '1986-01-01');
-
-INSERT INTO record_labels (record_label_name) VALUES
-    ('Epic Records');
 
 INSERT INTO record_albums (name, release_date, artist_id, genre_id, record_label_id) VALUES
     ('Boston', '1976-08-25',
