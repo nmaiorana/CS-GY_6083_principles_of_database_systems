@@ -21,7 +21,7 @@ class RecordGenres:
 
     @staticmethod
     def get_session():
-        Session = sa.orm.sessionmaker(dbu.engine)
+        Session = sa.orm.sessionmaker(dbu.engine, expire_on_commit=False)
         return Session()
 
     @staticmethod
@@ -58,18 +58,22 @@ class RecordGenres:
     def update(data_object):
         session = RecordGenres.get_session()
         data_object_to_update = session.query(RecordGenres).filter_by(genre_id=data_object.genre_id).first()
-        print(f'Updating record genre: {data_object_to_update}')
         data_object_to_update.genre_name = data_object.genre_name
         data_object_to_update.genre_description = data_object.genre_description
-        print(f'Updated record genre: {data_object_to_update}')
         session.commit()
         session.close()
         return data_object_to_update
 
     @staticmethod
+    def delete(genre_id):
+        session = RecordGenres.get_session()
+        session.query(RecordGenres).filter_by(genre_id=genre_id).delete()
+        session.commit()
+        session.close()
+
+    @staticmethod
     def delete_by_name(genre_name):
         session = RecordGenres.get_session()
-        session.query(RecordGenres).filter_by(genre_name=test_genre_name).delete()
         session.query(RecordGenres).filter_by(genre_name=genre_name).delete()
         session.commit()
         session.close()
@@ -84,6 +88,7 @@ if __name__ == '__main__':
     test_genre_name = 'TEST Genre'
     updated_genre_name = 'Updated Genre'
     new_record = RecordGenres.create(genre_name=test_genre_name, genre_description='A new genre')
+    print(f'New record genre: {new_record}')
 
     print(f'New record genres:')
     for record in RecordGenres.read_all():
