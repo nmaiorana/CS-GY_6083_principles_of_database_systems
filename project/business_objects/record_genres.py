@@ -19,39 +19,89 @@ class RecordGenres:
     genre_name: str = mapped_column(sa.String)
     genre_description: str = mapped_column(sa.String)
 
+    @staticmethod
+    def get_session():
+        Session = sa.orm.sessionmaker(dbu.engine)
+        return Session()
+
+    @staticmethod
+    def create(genre_name, genre_description):
+        session = RecordGenres.get_session()
+        data_object = RecordGenres(genre_name, genre_description)
+        session.add(data_object)
+        session.commit()
+        session.close()
+        return data_object
+
+    @staticmethod
+    def read_all() -> list:
+        session = RecordGenres.get_session()
+        data_list = session.query(RecordGenres).all()
+        session.close()
+        return data_list
+
+    @staticmethod
+    def read(genre_id):
+        session = RecordGenres.get_session()
+        data_object = session.query(RecordGenres).filter_by(genre_id=genre_id).first()
+        session.close()
+        return data_object
+
+    @staticmethod
+    def read_by_name(genre_name):
+        session = RecordGenres.get_session()
+        data_objects = session.query(RecordGenres).filter_by(genre_name=genre_name).all()
+        session.close()
+        return data_objects
+
+    @staticmethod
+    def update(data_object):
+        session = RecordGenres.get_session()
+        data_object_to_update = session.query(RecordGenres).filter_by(genre_id=data_object.genre_id).first()
+        print(f'Updating record genre: {data_object_to_update}')
+        data_object_to_update.genre_name = data_object.genre_name
+        data_object_to_update.genre_description = data_object.genre_description
+        print(f'Updated record genre: {data_object_to_update}')
+        session.commit()
+        session.close()
+        return data_object_to_update
+
+    @staticmethod
+    def delete_by_name(genre_name):
+        session = RecordGenres.get_session()
+        session.query(RecordGenres).filter_by(genre_name=test_genre_name).delete()
+        session.query(RecordGenres).filter_by(genre_name=genre_name).delete()
+        session.commit()
+        session.close()
+
 
 if __name__ == '__main__':
-    Session = sa.orm.sessionmaker(dbu.engine)
-    session = Session()
+
+    print(f'Current record genres:')
+    for record in RecordGenres.read_all():
+        print(record)
+
     test_genre_name = 'TEST Genre'
     updated_genre_name = 'Updated Genre'
-    print(f'Current record genres:')
-    for record in session.query(RecordGenres).all():
-        print(record)
+    new_record = RecordGenres.create(genre_name=test_genre_name, genre_description='A new genre')
 
-    new_record = RecordGenres(genre_name=test_genre_name, genre_description='A new genre')
-    session.add(new_record)
-    session.commit()
     print(f'New record genres:')
-    for record in session.query(RecordGenres).all():
+    for record in RecordGenres.read_all():
         print(record)
 
-    record_to_update = session.query(RecordGenres).filter_by(genre_id=new_record.genre_id).first()
+    record_to_update = RecordGenres.read_by_name(test_genre_name)[0]
     record_to_update.genre_name = updated_genre_name
-    session.commit()
-    print(f'Updated record genres:')
-    for record in session.query(RecordGenres).all():
-        print(record)
+    print(f'Record to update: {record_to_update}')
+    updated_record = RecordGenres.update(record_to_update)
 
-    record_to_update.genre_name = test_genre_name
-    session.commit()
+    print(f'Updated record genres:')
+    for record in RecordGenres.read_all():
+        print(record)
 
     # Clean up
-    session.query(RecordGenres).filter_by(genre_name=test_genre_name).delete()
-    session.query(RecordGenres).filter_by(genre_name=updated_genre_name).delete()
-    session.commit()
-    print(f'Original record genres:')
-    for record in session.query(RecordGenres).all():
-        print(record)
+    RecordGenres.delete_by_name(test_genre_name)
+    RecordGenres.delete_by_name(updated_genre_name)
 
-    session.close()
+    print(f'Original record genres:')
+    for record in RecordGenres.read_all():
+        print(record)
