@@ -5,6 +5,7 @@ from mysql.connector import errorcode
 import pandas as pd
 import os
 
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy import URL, Connection, inspect
 from sqlalchemy import create_engine
 
@@ -22,6 +23,11 @@ url_object = URL.create(
 )
 
 engine = create_engine(url_object)
+Session = sessionmaker(engine, expire_on_commit=False)
+
+
+def get_session():
+    return Session()
 
 
 def get_connection_string() -> str:
@@ -65,7 +71,7 @@ def sqlalchemy_query_to_df(query_string: str, index_col: str | list = None) -> p
 # Read one row from the database using a prepared statement
 def read_one_row(query: str, values: tuple):
     try:
-        conn = connect_to_db()
+        conn = sqlalchemy_connect_to_db()
         cursor = conn.cursor(prepared=True)
         cursor.execute(query, values)
         row = cursor.fetchone()
@@ -84,7 +90,7 @@ def read_one_row(query: str, values: tuple):
 # Write one row to the database using a prepared statement
 def write_one_row(query: str, values: tuple):
     try:
-        conn = connect_to_db()
+        conn = sqlalchemy_connect_to_db()
         cursor = conn.cursor(prepared=True)
         cursor.execute(query, values)
         conn.commit()
@@ -100,7 +106,7 @@ def write_one_row(query: str, values: tuple):
 
 
 if __name__ == "__main__":
-    connection = connect_to_db()
+    connection = sqlalchemy_connect_to_db()
     print(connection)
     connection.close()
     print("Connection closed")

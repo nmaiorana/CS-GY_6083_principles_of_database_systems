@@ -1,6 +1,6 @@
 # This will create a test case for RecordGenres
 
-# Path: project/business_objects/record_genres_test.py
+# Path: project/business_objects/test_record_genres.py
 
 import unittest
 from project.business_objects.record_genres import RecordGenres

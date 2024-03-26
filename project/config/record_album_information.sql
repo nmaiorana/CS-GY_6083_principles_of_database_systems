@@ -120,6 +120,35 @@ CREATE VIEW band_members AS
     JOIN MEMBERS_TO_ARTISTS ON RECORD_ARTISTS.artist_id = MEMBERS_TO_ARTISTS.artist_id
     JOIN GROUP_MEMBERS ON MEMBERS_TO_ARTISTS.member_id = GROUP_MEMBERS.member_id;
 
+# Stored Procedures
+
+# Stored Procedure to count the number of record_sales
+DELIMITER //
+CREATE PROCEDURE count_record_sales(IN album_id INT, OUT sales_count INT)
+BEGIN
+	SET @album_id = album_id;
+    SELECT
+        COUNT(sale_id) INTO sales_count
+    FROM RECORD_SALES
+    WHERE RECORD_SALES.album_id = @album_id;
+
+END //
+DELIMITER ;
+
+# Stored Procedure to calculate the total sales of a record
+DROP PROCEDURE IF EXISTS total_sales;
+DELIMITER //
+CREATE PROCEDURE total_record_sales(IN album_id INT, OUT total_sales NUMERIC)
+BEGIN
+	SET @album_id = album_id;
+    SELECT
+        sum(sale_quantity * unit_sale_price) INTO total_sales
+    FROM RECORD_SALES
+    WHERE RECORD_SALES.album_id = @album_id;
+
+END //
+DELIMITER ;
+
 
 # Inserting data into the tables
 

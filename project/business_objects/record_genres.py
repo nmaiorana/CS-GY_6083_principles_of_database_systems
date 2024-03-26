@@ -1,11 +1,9 @@
 # Using sqlalchemy to create a class to represent the record_genres table in the database. The RecordGenre class will
 # be used to interact with the database and hold the information for a record_genres table data.
-from dataclasses import dataclass
 
 from project.tools import db_utils as dbu
 import sqlalchemy as sa
 
-from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import registry
 
@@ -20,93 +18,48 @@ class RecordGenres:
     genre_description: str = mapped_column(sa.String)
 
     @staticmethod
-    def get_session():
-        Session = sa.orm.sessionmaker(dbu.engine, expire_on_commit=False)
-        return Session()
-
-    @staticmethod
     def create(genre_name, genre_description):
-        session = RecordGenres.get_session()
-        data_object = RecordGenres(genre_name, genre_description)
-        session.add(data_object)
-        session.commit()
-        session.close()
-        return data_object
+        with dbu.get_session() as session:
+            data_object = RecordGenres(genre_name, genre_description)
+            session.add(data_object)
+            session.commit()
+            return data_object
 
     @staticmethod
     def read_all() -> list:
-        session = RecordGenres.get_session()
-        data_list = session.query(RecordGenres).all()
-        session.close()
-        return data_list
+        with dbu.get_session() as session:
+            data_list = session.query(RecordGenres).all()
+            return data_list
 
     @staticmethod
     def read(genre_id):
-        session = RecordGenres.get_session()
-        data_object = session.query(RecordGenres).filter_by(genre_id=genre_id).first()
-        session.close()
-        return data_object
+        with dbu.get_session() as session:
+            data_object = session.query(RecordGenres).filter_by(genre_id=genre_id).first()
+            return data_object
 
     @staticmethod
     def read_by_name(genre_name):
-        session = RecordGenres.get_session()
-        data_objects = session.query(RecordGenres).filter_by(genre_name=genre_name).all()
-        session.close()
-        return data_objects
+        with dbu.get_session() as session:
+            data_objects = session.query(RecordGenres).filter_by(genre_name=genre_name).all()
+            return data_objects
 
     @staticmethod
     def update(data_object):
-        session = RecordGenres.get_session()
-        data_object_to_update = session.query(RecordGenres).filter_by(genre_id=data_object.genre_id).first()
-        data_object_to_update.genre_name = data_object.genre_name
-        data_object_to_update.genre_description = data_object.genre_description
-        session.commit()
-        session.close()
-        return data_object_to_update
+        with dbu.get_session() as session:
+            data_object_to_update = session.query(RecordGenres).filter_by(genre_id=data_object.genre_id).first()
+            data_object_to_update.genre_name = data_object.genre_name
+            data_object_to_update.genre_description = data_object.genre_description
+            session.commit()
+            return data_object_to_update
 
     @staticmethod
     def delete(genre_id):
-        session = RecordGenres.get_session()
-        session.query(RecordGenres).filter_by(genre_id=genre_id).delete()
-        session.commit()
-        session.close()
+        with dbu.get_session() as session:
+            session.query(RecordGenres).filter_by(genre_id=genre_id).delete()
+            session.commit()
 
     @staticmethod
     def delete_by_name(genre_name):
-        session = RecordGenres.get_session()
-        session.query(RecordGenres).filter_by(genre_name=genre_name).delete()
-        session.commit()
-        session.close()
-
-
-if __name__ == '__main__':
-
-    print(f'Current record genres:')
-    for record in RecordGenres.read_all():
-        print(record)
-
-    test_genre_name = 'TEST Genre'
-    updated_genre_name = 'Updated Genre'
-    new_record = RecordGenres.create(genre_name=test_genre_name, genre_description='A new genre')
-    print(f'New record genre: {new_record}')
-
-    print(f'New record genres:')
-    for record in RecordGenres.read_all():
-        print(record)
-
-    record_to_update = RecordGenres.read_by_name(test_genre_name)[0]
-    record_to_update.genre_name = updated_genre_name
-    print(f'Record to update: {record_to_update}')
-    updated_record = RecordGenres.update(record_to_update)
-
-    print(f'Updated record genres:')
-    for record in RecordGenres.read_all():
-        print(record)
-
-    # Clean up
-    RecordGenres.delete_by_name(test_genre_name)
-    RecordGenres.delete_by_name(updated_genre_name)
-
-    print(f'Original record genres:')
-    for record in RecordGenres.read_all():
-        print(record)
+        with dbu.get_session() as session:
+            session.query(RecordGenres).filter_by(genre_name=genre_name).delete()
+            session.commit()
