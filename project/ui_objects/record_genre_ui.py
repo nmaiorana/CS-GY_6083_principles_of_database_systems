@@ -3,12 +3,13 @@
 # genre_name and genre_description
 
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, OptionMenu
 from project.business_objects.record_genres_sql import RecordGenre
 
 
 class RecordGenreUI:
     def __init__(self):
+        self.optionMenu = None
         self.root = tk.Tk()
         self.root.title('Record Genre Manager')
         self.root.geometry('300x200')
@@ -23,18 +24,19 @@ class RecordGenreUI:
         self.root.mainloop()
 
     def create_widgets(self):
-        tk.Label(self.root, text='Genre Name').grid(row=0, column=0)
-        tk.Entry(self.root, textvariable=self.genre_name).grid(row=0, column=1)
-        tk.Label(self.root, text='Genre Description').grid(row=1, column=0)
-        tk.Entry(self.root, textvariable=self.genre_description).grid(row=1, column=1)
-        tk.Button(self.root, text='Create Genre', command=self.create_genre).grid(row=2, column=0)
-        tk.Button(self.root, text='Update Genre', command=self.update_genre).grid(row=2, column=1)
-        tk.OptionMenu(self.root, self.genre_selected, *self.genre_names, command=self.select_genre).grid(row=3, column=0)
-        tk.Button(self.root, text='Delete Genre', command=self.delete_genre).grid(row=3, column=1)
+        OptionMenu(self.root, self.genre_selected, *self.genre_names, command=self.select_genre).grid(row=0, column=1)
+        tk.Label(self.root, text='Genre Name').grid(row=1, column=0)
+        tk.Entry(self.root, textvariable=self.genre_name).grid(row=1, column=1)
+        tk.Label(self.root, text='Genre Description').grid(row=2, column=0)
+        tk.Entry(self.root, textvariable=self.genre_description).grid(row=2, column=1)
+        tk.Button(self.root, text='Create Genre', command=self.create_genre).grid(row=5, column=0)
+        tk.Button(self.root, text='Update Genre', command=self.update_genre).grid(row=5, column=1)
+        tk.Button(self.root, text='Delete Genre', command=self.delete_genre).grid(row=5, column=2)
 
     def reset_window(self):
+        self.optionMenu.children['menu'].delete(0, 'end')
         self.genres = RecordGenre.read_all()
-        self.genre_names = [genre.genre_name for genre in self.genres]
+        # [self.optionMenu.children["menu"].add_command(label=genre.genre_name, command=lambda  x=genre.genre_name: self.select_genre(genre.genre_name)) for genre in self.genres]
         self.genre_selected.set('Select Genre')
         print(f'Genres: {self.genre_names}')
 
@@ -47,9 +49,12 @@ class RecordGenreUI:
         self.genre_name.set(record.genre_name)
         self.genre_description.set(record.genre_description)
         self.genre_id = record.genre_id
-        self.reset_window()
 
     def create_genre(self):
+        genre = RecordGenre.read_by_name(self.genre_name.get())
+        if genre:
+            messagebox.showerror('Genre Exists', f'Genre {self.genre_name.get()} already exists')
+            return
         genre = RecordGenre.create(self.genre_name.get(), self.genre_description.get())
         messagebox.showinfo('Genre Created', f'Genre {genre.genre_name} created with id {genre.genre_id}')
         self.reset_window()
