@@ -13,7 +13,7 @@ The project will construct a database with a minimum of 7 tables. The tables wil
 ## Project Details
 For this project I will construct a database using MySQL to store information about record album: the name of the album, the recording date, the artists behind the album (bands), the members of the recording group, the record label which produced the album, genre and sales information. This will utilize a 2-tier architecture using Python as the primary Language.
 
-I will construct business object classes to represent the data in Python using data classes. To map these data classes to the MySQL db, I will use the SQLAlchemy as my Object Relational Mapper (ORM) tool. Lastly I will construct a series of UI classes to perform Create, Read, Update and Delete operations on one of the tables.
+I will construct business object classes to represent the data in Python using data classes. To map these data classes to the MySQL db, I will use the MySQL Connect coupled with dataclasses to create my Business Objects. Lastly I will construct a series of UI classes to perform Create, Read, Update and Delete operations on one of the tables.
 
 ## Entity Relationship Diagram
 ```mermaid
@@ -54,16 +54,16 @@ erDiagram
     }
     RECORD_GENRES {
         genre_id int PK
-        genre_name varchar(255)
+        genre_name varchar(255) "UNIQUE"
         genre_description varchar(255)
     }
     RECORD_LABELS {
         record_label_id int PK
-        record_label_name varchar(255)
+        record_label_name varchar(255) "UNIQUE"
     }
     RECORD_ALBUMS {
         album_id int PK
-        name varchar(255)
+        name varchar(255) "UNIQUE"
         release_date date
         artist_id int FK
         genre_id int FK

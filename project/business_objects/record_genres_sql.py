@@ -6,7 +6,7 @@ from project.tools import db_utils as dbu
 
 
 @dataclasses.dataclass
-class RecordGenres:
+class RecordGenre:
     __tablename__ = 'record_genres'
     genre_id: int
     genre_name: str
@@ -22,7 +22,7 @@ class RecordGenres:
             with conn.cursor() as cur:
                 cur.execute(add_genre, data_genre)
                 conn.commit()
-        return RecordGenres.read_by_name(genre_name)
+        return RecordGenre.read_by_name(genre_name)
 
     @staticmethod
     def read_all() -> list:
@@ -31,7 +31,7 @@ class RecordGenres:
             with conn.cursor() as cursor:
                 cursor.execute("SELECT * FROM record_genres")
                 for row in cursor.fetchall():
-                    rows.append(RecordGenres(row[0], row[1], row[2]))
+                    rows.append(RecordGenre(row[0], row[1], row[2]))
                 return rows
 
     @staticmethod
@@ -42,7 +42,7 @@ class RecordGenres:
                 result = cursor.fetchone()
                 if result is None:
                     return None
-                return RecordGenres(result[0], result[1], result[2])
+                return RecordGenre(result[0], result[1], result[2])
 
     @staticmethod
     def read_by_name(genre_name):
@@ -52,7 +52,7 @@ class RecordGenres:
                 result = cursor.fetchone()
                 if result is None:
                     return None
-                return RecordGenres(result[0], result[1], result[2])
+                return RecordGenre(result[0], result[1], result[2])
 
     def update(self):
         with dbu.get_connector() as conn:

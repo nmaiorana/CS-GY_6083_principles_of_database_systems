@@ -4,7 +4,7 @@
 
 import unittest
 from project.tools import db_utils as dbu
-from project.business_objects.record_genres_sql import RecordGenres
+from project.business_objects.record_genres_sql import RecordGenre
 
 test_genre_name = 'Test Genre'
 test_update_genre_name = 'Updated Genre'
@@ -23,58 +23,58 @@ class RecordGenresTest(unittest.TestCase):
                 conn.commit()
 
     def test_read_all(self):
-        record_genres = RecordGenres.read_all()
+        record_genres = RecordGenre.read_all()
         self.assertGreaterEqual(len(record_genres), 1)
 
     def test_read(self):
-        record_genre = RecordGenres.read_all()[1]
-        test_record = RecordGenres.read(record_genre.genre_id)
+        record_genre = RecordGenre.read_all()[1]
+        test_record = RecordGenre.read(record_genre.genre_id)
         self.assertIsNotNone(record_genre)
         self.assertEqual(record_genre.genre_id, test_record.genre_id)
         self.assertEqual(record_genre.genre_name, test_record.genre_name)
         self.assertEqual(record_genre.genre_description, test_record.genre_description)
-        test_record = RecordGenres.read(-1)
+        test_record = RecordGenre.read(-1)
         self.assertIsNone(test_record)
 
     def test_read_by_name(self):
-        record_genre = RecordGenres.read(1)
-        test_record = RecordGenres.read_by_name(record_genre.genre_name)
+        record_genre = RecordGenre.read(1)
+        test_record = RecordGenre.read_by_name(record_genre.genre_name)
         self.assertIsNotNone(record_genre)
         self.assertEqual(record_genre.genre_id, test_record.genre_id)
         self.assertEqual(record_genre.genre_name, test_record.genre_name)
         self.assertEqual(record_genre.genre_description, test_record.genre_description)
-        test_record = RecordGenres.read_by_name('_______Not a genre_______')
+        test_record = RecordGenre.read_by_name('_______Not a genre_______')
         self.assertIsNone(test_record)
 
     def test_create(self):
-        record_genre = RecordGenres.create(genre_name='Test Genre', genre_description='A test genre')
+        record_genre = RecordGenre.create(genre_name='Test Genre', genre_description='A test genre')
         self.assertIsNotNone(record_genre)
         self.assertIsNotNone(record_genre.genre_id)
         self.assertEqual('Test Genre', record_genre.genre_name)
         self.assertEqual('A test genre', record_genre.genre_description)
-        record_genre = RecordGenres.read(record_genre.genre_id)
+        record_genre = RecordGenre.read(record_genre.genre_id)
         self.assertIsNotNone(record_genre)
         self.assertEqual('Test Genre', record_genre.genre_name)
         self.assertEqual('A test genre', record_genre.genre_description)
 
     def test_update(self):
-        record_genre = RecordGenres.create(genre_name='Test Genre', genre_description='A test genre')
+        record_genre = RecordGenre.create(genre_name='Test Genre', genre_description='A test genre')
         record_genre.genre_name = 'Updated Genre'
         record_genre.update()
-        updated_record = RecordGenres.read(record_genre.genre_id)
+        updated_record = RecordGenre.read(record_genre.genre_id)
         self.assertIsNotNone(updated_record)
         self.assertEqual(record_genre.genre_id, updated_record.genre_id)
         self.assertEqual(record_genre.genre_name, updated_record.genre_name)
         self.assertEqual(record_genre.genre_description, updated_record.genre_description)
 
     def test_delete(self):
-        record_genre = RecordGenres.create(genre_name='Test Genre', genre_description='A test genre')
+        record_genre = RecordGenre.create(genre_name='Test Genre', genre_description='A test genre')
         record_genre.delete()
-        deleted_record = RecordGenres.read(record_genre.genre_id)
+        deleted_record = RecordGenre.read(record_genre.genre_id)
         self.assertIsNone(deleted_record)
 
     def test_delete_by_name(self):
-        record_genre = RecordGenres.create(genre_name='Test Genre', genre_description='A test genre')
+        record_genre = RecordGenre.create(genre_name='Test Genre', genre_description='A test genre')
         record_genre.delete_by_name()
-        deleted_record = RecordGenres.read(record_genre.genre_id)
+        deleted_record = RecordGenre.read(record_genre.genre_id)
         self.assertIsNone(deleted_record)

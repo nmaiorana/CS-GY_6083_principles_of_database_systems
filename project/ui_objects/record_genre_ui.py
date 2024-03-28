@@ -4,7 +4,7 @@
 
 import tkinter as tk
 from tkinter import messagebox
-from project.business_objects.record_genres_sql import RecordGenres
+from project.business_objects.record_genres_sql import RecordGenre
 
 
 class RecordGenreUI:
@@ -16,7 +16,7 @@ class RecordGenreUI:
         self.genre_description = tk.StringVar()
         self.genre_selected = tk.StringVar()
         self.genre_selected.set('Select Genre')
-        self.genres = RecordGenres.read_all()
+        self.genres = RecordGenre.read_all()
         self.genre_names = [genre.genre_name for genre in self.genres]
         self.genre_id = None
         self.create_widgets()
@@ -33,14 +33,14 @@ class RecordGenreUI:
         tk.Button(self.root, text='Delete Genre', command=self.delete_genre).grid(row=3, column=1)
 
     def reset_window(self):
-        self.genres = RecordGenres.read_all()
+        self.genres = RecordGenre.read_all()
         self.genre_names = [genre.genre_name for genre in self.genres]
         self.genre_selected.set('Select Genre')
         print(f'Genres: {self.genre_names}')
 
     def select_genre(self, genre_name):
         print(f'Selected genre: {genre_name}')
-        record = RecordGenres.read_by_name(genre_name)
+        record = RecordGenre.read_by_name(genre_name)
         if not record:
             messagebox.showerror('Genre Not Found', f'Genre {genre_name} not found')
             return
@@ -50,12 +50,12 @@ class RecordGenreUI:
         self.reset_window()
 
     def create_genre(self):
-        genre = RecordGenres.create(self.genre_name.get(), self.genre_description.get())
+        genre = RecordGenre.create(self.genre_name.get(), self.genre_description.get())
         messagebox.showinfo('Genre Created', f'Genre {genre.genre_name} created with id {genre.genre_id}')
         self.reset_window()
 
     def update_genre(self):
-        record = RecordGenres.read(self.genre_id)
+        record = RecordGenre.read(self.genre_id)
         if record:
             record.genre_name = self.genre_name.get()
             record.genre_description = self.genre_description.get()
@@ -68,7 +68,7 @@ class RecordGenreUI:
 
     def delete_genre(self):
         if self.genre_id:
-            record = RecordGenres.read(self.genre_id)
+            record = RecordGenre.read(self.genre_id)
             record.delete()
             messagebox.showinfo('Genre Deleted', f'Genre {record.genre_name} deleted with id {record.genre_id}')
             self.reset_window()
