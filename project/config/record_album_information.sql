@@ -35,13 +35,15 @@ CREATE TABLE RECORD_GENRES (
     genre_id int NOT NULL AUTO_INCREMENT,
     genre_name varchar(255),
     genre_description varchar(255),
-    PRIMARY KEY (genre_id)
+    PRIMARY KEY (genre_id),
+    UNIQUE (genre_name)
 );
 
 CREATE TABLE RECORD_LABELS (
     record_label_id int NOT NULL AUTO_INCREMENT,
     record_label_name varchar(255),
-    PRIMARY KEY (record_label_id)
+    PRIMARY KEY (record_label_id),
+    UNIQUE (record_label_name)
 );
 
 CREATE TABLE RECORD_ALBUMS (
@@ -54,7 +56,8 @@ CREATE TABLE RECORD_ALBUMS (
     PRIMARY KEY (album_id),
     FOREIGN KEY (artist_id) REFERENCES RECORD_ARTISTS(artist_id),
     FOREIGN KEY (genre_id) REFERENCES RECORD_GENRES(genre_id),
-    FOREIGN KEY (record_label_id) REFERENCES RECORD_LABELS(record_label_id)
+    FOREIGN KEY (record_label_id) REFERENCES RECORD_LABELS(record_label_id),
+    UNIQUE (name)
 );
 
 CREATE TABLE RECORD_TRACKS (

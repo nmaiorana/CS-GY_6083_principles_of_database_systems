@@ -4,7 +4,7 @@
 
 import tkinter as tk
 from tkinter import messagebox
-from project.business_objects.record_genres import RecordGenres
+from project.business_objects.record_genres_sql import RecordGenres
 
 
 class RecordGenreUI:
@@ -14,8 +14,8 @@ class RecordGenreUI:
         self.root.geometry('300x200')
         self.genre_name = tk.StringVar()
         self.genre_description = tk.StringVar()
-        self.genre_list = tk.StringVar()
-        self.genre_list.set('Select Genre')
+        self.genre_selected = tk.StringVar()
+        self.genre_selected.set('Select Genre')
         self.genres = RecordGenres.read_all()
         self.genre_names = [genre.genre_name for genre in self.genres]
         self.genre_id = None
@@ -29,21 +29,24 @@ class RecordGenreUI:
         tk.Entry(self.root, textvariable=self.genre_description).grid(row=1, column=1)
         tk.Button(self.root, text='Create Genre', command=self.create_genre).grid(row=2, column=0)
         tk.Button(self.root, text='Update Genre', command=self.update_genre).grid(row=2, column=1)
-        tk.OptionMenu(self.root, self.genre_list, *self.genre_names, command=self.select_genre).grid(row=3, column=0)
+        tk.OptionMenu(self.root, self.genre_selected, *self.genre_names, command=self.select_genre).grid(row=3, column=0)
         tk.Button(self.root, text='Delete Genre', command=self.delete_genre).grid(row=3, column=1)
 
     def reset_window(self):
         self.genres = RecordGenres.read_all()
         self.genre_names = [genre.genre_name for genre in self.genres]
-        self.genre_list.set('Select Genre')
+        self.genre_selected.set('Select Genre')
         print(f'Genres: {self.genre_names}')
 
     def select_genre(self, genre_name):
         print(f'Selected genre: {genre_name}')
-        genre = RecordGenres.read_by_name(genre_name)
-        self.genre_name.set(genre[0].genre_name)
-        self.genre_description.set(genre[0].genre_description)
-        self.genre_id = genre[0].genre_id
+        record = RecordGenres.read_by_name(genre_name)
+        if not record:
+            messagebox.showerror('Genre Not Found', f'Genre {genre_name} not found')
+            return
+        self.genre_name.set(record.genre_name)
+        self.genre_description.set(record.genre_description)
+        self.genre_id = record.genre_id
         self.reset_window()
 
     def create_genre(self):
@@ -52,20 +55,22 @@ class RecordGenreUI:
         self.reset_window()
 
     def update_genre(self):
-        genre = RecordGenres.read_by_name(self.genre_name.get())
-        if genre:
-            genre[0].genre_description = self.genre_description.get()
-            updated_genre = RecordGenres.update(genre[0])
+        record = RecordGenres.read(self.genre_id)
+        if record:
+            record.genre_name = self.genre_name.get()
+            record.genre_description = self.genre_description.get()
+            record.update()
             messagebox.showinfo('Genre Updated',
-                                f'Genre {updated_genre.genre_name} updated with id {updated_genre.genre_id}')
+                                f'Genre {record.genre_name} updated with id {record.genre_id}')
             self.reset_window()
         else:
             messagebox.showerror('Genre Not Found', f'Genre {self.genre_name.get()} not found')
 
     def delete_genre(self):
         if self.genre_id:
-            RecordGenres.delete(self.genre_id)
-            messagebox.showinfo('Genre Deleted', f'Genre {self.genre_name.get()} deleted with id {self.genre_id}')
+            record = RecordGenres.read(self.genre_id)
+            record.delete()
+            messagebox.showinfo('Genre Deleted', f'Genre {record.genre_name} deleted with id {record.genre_id}')
             self.reset_window()
         else:
             messagebox.showerror('Genre Not Selected', f'Genre {self.genre_name.get()}')

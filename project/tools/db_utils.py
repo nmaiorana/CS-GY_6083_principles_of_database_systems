@@ -113,3 +113,25 @@ if __name__ == "__main__":
     print(sqlalchemy_query_to_df("SELECT * FROM record_albums", "album_id"))
     print(sqlalchemy_query_to_df('select * from album_information_details',
                                  ['name', 'release_date', 'artist_name', 'record_label_name', 'track_number']))
+
+
+# use msql.connector to execute a query
+def execute(query):
+    try:
+        with get_connector() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query)
+            conn.commit()
+    except mysql.connector.Error as db_error:
+        if db_error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with your user name or password")
+        elif db_error.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist")
+        else:
+            print(db_error)
+        raise db_error
+
+
+def get_connector():
+    conn = mysql.connector.connect(user=MYSQL_USER, password=MYSQL_PW, host=MYSQL_HOST, database=MYSQL_DB)
+    return conn
