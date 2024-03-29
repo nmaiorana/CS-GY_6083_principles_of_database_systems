@@ -1,7 +1,7 @@
 # Using sqlalchemy to create a class to represent the record_labels table in the database. The RecordLabels class will
 # be used to interact with the database and hold the information for a record_labels table data.
 
-from project.tools import db_utils as dbu
+from tools import db_utils as dbu
 import sqlalchemy as sa
 
 from sqlalchemy.orm import mapped_column

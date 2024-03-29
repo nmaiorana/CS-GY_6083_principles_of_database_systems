@@ -1,7 +1,7 @@
 # Using sqlalchemy to create a class to represent the record_artists table in the database. The RecordArtists class will
 # be used to interact with the database and hold the information for a record_artists table data.
 
-from project.tools import db_utils as dbu
+from tools import db_utils as dbu
 import sqlalchemy as sa
 
 from sqlalchemy.orm import mapped_column

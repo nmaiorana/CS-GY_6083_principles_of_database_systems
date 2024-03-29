@@ -3,7 +3,7 @@
 # Path: project/business_objects/test_record_labels.py
 
 import unittest
-from project.business_objects.record_labels import RecordLabels
+from business_objects.record_labels import RecordLabels
 
 
 class RecordLabelsTest(unittest.TestCase):

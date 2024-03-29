@@ -17,7 +17,7 @@ from tkinter import StringVar
 # from customtkinter import CTkLabel as Label
 # from customtkinter import StringVar
 
-from project.business_objects.record_genres_sql import RecordGenre
+from business_objects.record_genres_sql import RecordGenre
 
 
 class RecordGenreUI:

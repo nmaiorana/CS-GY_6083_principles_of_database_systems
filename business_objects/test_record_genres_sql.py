@@ -3,8 +3,8 @@
 # Path: project/business_objects/test_record_genres.py
 
 import unittest
-from project.tools import db_utils as dbu
-from project.business_objects.record_genres_sql import RecordGenre
+from tools import db_utils as dbu
+from business_objects.record_genres_sql import RecordGenre
 
 test_genre_name = 'Test Genre'
 test_update_genre_name = 'Updated Genre'

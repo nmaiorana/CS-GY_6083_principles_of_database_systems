@@ -1,6 +1,6 @@
 # This python script will create a class to view the band members.
 
-from project.tools import db_utils as dbu
+from tools import db_utils as dbu
 # Create a UI class to interact using customTkinter
 import customtkinter
 

@@ -2,12 +2,11 @@
 # be used to interact with the database and hold the information for a record_genres table data.
 
 import dataclasses
-from project.tools import db_utils as dbu
+from tools import db_utils as dbu
 
 
 @dataclasses.dataclass
 class RecordGenre:
-    __tablename__ = 'record_genres'
     genre_id: int
     genre_name: str
     genre_description: str
