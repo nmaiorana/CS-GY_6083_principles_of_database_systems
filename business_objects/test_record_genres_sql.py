@@ -1,7 +1,5 @@
 # This will create a test case for RecordGenres
 
-# Path: project/business_objects/test_record_genres.py
-
 import unittest
 from tools import db_utils as dbu
 from business_objects.record_genres_sql import RecordGenre
@@ -37,7 +35,7 @@ class RecordGenresTest(unittest.TestCase):
         self.assertIsNone(test_record)
 
     def test_read_by_name(self):
-        record_genre = RecordGenre.read(1)
+        record_genre = RecordGenre.read_all()[1]
         test_record = RecordGenre.read_by_name(record_genre.genre_name)
         self.assertIsNotNone(record_genre)
         self.assertEqual(record_genre.genre_id, test_record.genre_id)
