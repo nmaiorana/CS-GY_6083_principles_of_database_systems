@@ -183,7 +183,7 @@ BEGIN
         IF done THEN
 			LEAVE read_loop;
 		END IF;
-        SET response_summary = CONCAT(response_summary, " ", track_summary);
+        SET response_summary = CONCAT(response_summary, track_summary, ";");
     END LOOP;
     CLOSE result_cursor;
 	SELECT
