@@ -3,7 +3,7 @@
 # Path: project/business_objects/test_record_genres.py
 
 import unittest
-from business_objects.record_genres import RecordGenres
+from business_objects.orm_version.record_genres import RecordGenres
 
 
 class RecordGenresTest(unittest.TestCase):

@@ -79,8 +79,8 @@ er_diargram = """
     }
     RECORD_ALBUMS {
         album_id int PK
-        name varchar(255) "UNIQUE"
-        release_date date
+        album_name varchar(255) "UNIQUE"
+        release_date date "UNIQUE"
         artist_id int FK
         genre_id int FK
         record_label_id int

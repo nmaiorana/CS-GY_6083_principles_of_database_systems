@@ -3,7 +3,7 @@
 # Path: project/business_objects/test_group_members.py
 
 import unittest
-from business_objects.group_members import GroupMembers
+from business_objects.orm_version.group_members import GroupMembers
 
 
 class GroupMembersTest(unittest.TestCase):

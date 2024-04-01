@@ -20,12 +20,12 @@ class RecordSalesTest(unittest.TestCase):
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 data = ((self.test_album_name,))
-                select_statement = "SELECT * FROM record_albums WHERE name = (%s)"
+                select_statement = "SELECT * FROM record_albums WHERE album_name = (%s)"
                 cursor.execute(select_statement, data)
                 result = cursor.fetchone()
                 if result is None or len(result) == 0:
                     insert_statement = ("INSERT INTO record_albums "
-                                        "(name) "
+                                        "(album_name) "
                                         "VALUES (%s)")
 
                     cursor.execute(insert_statement, data)
@@ -39,7 +39,7 @@ class RecordSalesTest(unittest.TestCase):
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 data = ((self.test_album_name,))
-                select_statement = "SELECT * FROM record_albums WHERE name = (%s)"
+                select_statement = "SELECT * FROM record_albums WHERE album_name = (%s)"
                 cursor.execute(select_statement, data)
                 for result in cursor.fetchall():
                     test_album_id = result[0]

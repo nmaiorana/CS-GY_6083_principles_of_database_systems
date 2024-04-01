@@ -3,7 +3,7 @@
 # Path: project/business_objects/test_record_artists.py
 
 import unittest
-from business_objects.record_artists import RecordArtists
+from business_objects.orm_version.record_artists import RecordArtists
 
 
 class RecordArtistsTest(unittest.TestCase):
