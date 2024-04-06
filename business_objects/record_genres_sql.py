@@ -53,6 +53,14 @@ class RecordGenre:
                     return None
                 return RecordGenre(result[0], result[1], result[2])
 
+    @staticmethod
+    def delete_by_name(genre_name):
+        with dbu.get_connector() as conn:
+            with conn.cursor() as cursor:
+                delete_statement = f"DELETE FROM record_genres WHERE genre_name = '{genre_name}'"
+                cursor.execute(delete_statement)
+                conn.commit()
+
     def update(self):
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
@@ -71,9 +79,3 @@ class RecordGenre:
                 cursor.execute(delete_statement)
                 conn.commit()
 
-    def delete_by_name(self):
-        with dbu.get_connector() as conn:
-            with conn.cursor() as cursor:
-                delete_statement = f"DELETE FROM record_genres WHERE genre_name = '{self.genre_name}'"
-                cursor.execute(delete_statement)
-                conn.commit()

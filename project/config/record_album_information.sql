@@ -118,6 +118,7 @@ CREATE VIEW band_members AS
     SELECT
         RECORD_ARTISTS.artist_name,
         GROUP_MEMBERS.member_name,
+        GROUP_MEMBERS.member_country,
         MEMBERS_TO_ARTISTS.member_from_date,
         MEMBERS_TO_ARTISTS.member_to_date
     FROM
@@ -198,6 +199,20 @@ BEGIN
 END //
 DELIMITER ;
 
+# Triggers
+
+# Trigger to cleanup artists when deleted
+DROP TRIGGER IF EXISTS cleanup_artists;
+
+DELIMITER //
+CREATE TRIGGER cleanup_artists BEFORE DELETE ON record_artists
+	FOR EACH ROW
+    BEGIN
+		DELETE FROM members_to_artists m WHERE m.artist_id = OLD.artist_id;
+        UPDATE record_albums r set artist_id = null WHERE r.artist_id = OLD.artist_id;
+	END //
+DELIMITER ;
+
 
 # Inserting data into the tables
 
@@ -219,7 +234,8 @@ INSERT INTO record_genres (genre_name, genre_description) VALUES
     ('Soul', 'Soul music'),
     ('Funk', 'Funk music'),
     ('Disco', 'Disco music'),
-    ('Samba', 'Samba music');
+    ('Samba', 'Samba music'),
+    ('New Age', 'New Age music');
 
 # Record labels
 INSERT INTO record_labels (record_label_name) VALUES
@@ -238,12 +254,12 @@ INSERT INTO record_labels (record_label_name) VALUES
 INSERT INTO record_artists (artist_name) VALUES
     ('Pink Floyd');
 
-INSERT INTO group_members (member_name) VALUES
-    ('Syd Barrett'),
-    ('Roger Waters'),
-    ('Richard Wright'),
-    ('Nick Mason'),
-    ('David Gilmour');
+INSERT INTO group_members (member_name, member_country, member_birthdate) VALUES
+    ('Syd Barrett', 'England', '1946-01-06'),
+    ('Roger Waters', 'England', '1943-09-06'),
+    ('Richard Wright', 'England', '1943-07-28'),
+    ('Nick Mason', 'England', '1944-01-27'),
+    ('David Gilmour', 'England', '1946-03-06');
 
 INSERT INTO members_to_artists (artist_id, member_id, member_from_date, member_to_date) VALUES
     ((SELECT artist_id FROM record_artists WHERE artist_name = 'Pink Floyd'), (SELECT member_id FROM group_members WHERE member_name = 'Syd Barrett'), '1965-01-01', '1968-01-01'),
@@ -292,12 +308,12 @@ INSERT INTO record_tracks (album_id, track_name, track_number, genre_id) VALUES
 INSERT INTO record_artists (artist_name) VALUES
     ('Boston');
 
-INSERT INTO group_members (member_name) VALUES
-    ('Tom Scholz'),
-    ('Brad Delp'),
-    ('Barry Goudreau'),
-    ('Fran Sheehan'),
-    ('Sib Hashian');
+INSERT INTO group_members (member_name, member_country, member_birthdate) VALUES
+    ('Tom Scholz', 'USA', '1947-03-10'),
+    ('Brad Delp', 'USA', '1951-06-12'),
+    ('Barry Goudreau', 'USA', '1951-11-29'),
+    ('Fran Sheehan', 'USA', '1949-03-26'),
+    ('Sib Hashian', 'USA', '1949-08-17');
 
 INSERT INTO members_to_artists (artist_id, member_id, member_from_date, member_to_date) VALUES
     ((SELECT artist_id FROM record_artists WHERE artist_name = 'Boston'), (SELECT member_id FROM group_members WHERE member_name = 'Tom Scholz'), '1975-01-01', '1989-01-01'),
@@ -335,3 +351,49 @@ INSERT INTO record_tracks (album_id, track_name, track_number, genre_id) VALUES
     ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), 'Hitch a Ride', 6, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
     ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), 'Something About You', 7, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
     ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), 'Let Me Take You Home Tonight', 8, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock'));
+
+# Enya: Watermark
+
+INSERT INTO record_artists (artist_name) VALUES
+    ('Enya');
+
+INSERT INTO group_members (member_name, member_country, member_birthdate) VALUES
+    ('Enya', 'Ireland', '1961-05-17');
+
+INSERT INTO members_to_artists (artist_id, member_id, member_from_date, member_to_date) VALUES
+    ((SELECT artist_id FROM record_artists WHERE artist_name = 'Enya'), (SELECT member_id FROM group_members WHERE member_name = 'Enya'), '1982-01-01', '2020-01-01');
+
+INSERT INTO record_albums (album_name, release_date, artist_id, genre_id, record_label_id) VALUES
+    ('Watermark', '1988-09-19',
+     (SELECT artist_id FROM record_artists WHERE artist_name = 'Enya'),
+     (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age'),
+     (SELECT record_label_id FROM record_labels WHERE record_label_name = 'Warner Bros. Records'));
+
+INSERT INTO record_sales(album_id, sale_date, sale_quantity, unit_sale_price) VALUES
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1988-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1989-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1990-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1991-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1992-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1993-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1994-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1995-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1996-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1997-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1998-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1999-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '2000-01-01', 1000000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '2001-01-01', 1000000, 10.00);
+
+INSERT INTO record_tracks (album_id, track_name, track_number, genre_id) VALUES
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Watermark', 1, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Cursum Perficio', 2, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'On Your Shore', 3, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Storms in Africa', 4, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Exile', 5, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Miss Clare Remembers', 6, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Orinoco Flow', 7, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Evening Falls', 8, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'River', 9, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'The Longships', 10, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Na Laetha Geal M''ige', 11, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age'));

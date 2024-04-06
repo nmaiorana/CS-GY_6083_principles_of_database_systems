@@ -10,6 +10,16 @@ test_update_genre_name = 'Updated Genre'
 
 class RecordGenresTest(unittest.TestCase):
 
+    def setUp(cls):
+        with dbu.get_connector() as conn:
+            with conn.cursor() as cursor:
+                delete_statement = "DELETE FROM record_genres WHERE genre_name = %(genre_name)s "
+                delete_data = {'genre_name': test_genre_name}
+                cursor.execute(delete_statement, delete_data)
+                delete_data = {'genre_name': test_update_genre_name}
+                cursor.execute(delete_statement, delete_data)
+                conn.commit()
+
     def tearDown(cls):
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
@@ -73,6 +83,6 @@ class RecordGenresTest(unittest.TestCase):
 
     def test_delete_by_name(self):
         record_genre = RecordGenre.create(genre_name='Test Genre', genre_description='A test genre')
-        record_genre.delete_by_name()
+        RecordGenre.delete_by_name(record_genre.genre_name)
         deleted_record = RecordGenre.read(record_genre.genre_id)
         self.assertIsNone(deleted_record)
