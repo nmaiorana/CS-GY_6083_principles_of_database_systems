@@ -10,13 +10,15 @@ USE album_information;
 
 CREATE TABLE RECORD_ARTISTS (
     artist_id int NOT NULL AUTO_INCREMENT,
-    artist_name varchar(255),
+    artist_name varchar(40),
     PRIMARY KEY (artist_id)
 );
 
 CREATE TABLE GROUP_MEMBERS (
     member_id int NOT NULL AUTO_INCREMENT,
-    member_name varchar(255),
+    member_name varchar(40),
+    member_country varchar(40),
+    member_birthdate date,
     PRIMARY KEY (member_id)
 );
 
@@ -33,7 +35,7 @@ CREATE TABLE MEMBERS_TO_ARTISTS (
 
 CREATE TABLE RECORD_GENRES (
     genre_id int NOT NULL AUTO_INCREMENT,
-    genre_name varchar(255),
+    genre_name varchar(40),
     genre_description varchar(255),
     PRIMARY KEY (genre_id),
     UNIQUE (genre_name)
@@ -41,14 +43,14 @@ CREATE TABLE RECORD_GENRES (
 
 CREATE TABLE RECORD_LABELS (
     record_label_id int NOT NULL AUTO_INCREMENT,
-    record_label_name varchar(255),
+    record_label_name varchar(50),
     PRIMARY KEY (record_label_id),
     UNIQUE (record_label_name)
 );
 
 CREATE TABLE RECORD_ALBUMS (
     album_id int NOT NULL AUTO_INCREMENT,
-    album_name varchar(255),
+    album_name varchar(50),
     release_date date,
     artist_id int,
     genre_id int,
@@ -63,7 +65,7 @@ CREATE TABLE RECORD_ALBUMS (
 CREATE TABLE RECORD_TRACKS (
     track_id int NOT NULL AUTO_INCREMENT,
     album_id int,
-    track_name varchar(255),
+    track_name varchar(40),
     track_number int,
     genre_id int,
     PRIMARY KEY (track_id),
@@ -157,17 +159,13 @@ DELIMITER ;
 # Function to summarize an album and all it's tracks
 
 DELIMITER //
-CREATE FUNCTION album_summary (album_id int) RETURNS varchar(250)
+CREATE FUNCTION album_summary (album_id int) RETURNS varchar(600)
 	READS SQL DATA
 BEGIN
 	DECLARE done int default false;
-    DECLARE track_summary varchar(200);
-	DECLARE album_summary varchar(50);
-    DECLARE response_summary varchar(300);
-    DECLARE album_name varchar(50);
-    DECLARE release_date date;
-    DECLARE track_number int;
-    DECLARE track_name varchar(255);
+    DECLARE track_summary varchar(400);
+	DECLARE album_summary varchar(200);
+    DECLARE response_summary varchar(600);
 	DECLARE result_cursor CURSOR FOR
 		SELECT
 			concat(" ", t.track_number, "-", t.track_name) AS track_summary
@@ -183,13 +181,18 @@ BEGIN
         IF done THEN
 			LEAVE read_loop;
 		END IF;
-        SET response_summary = CONCAT(response_summary, track_summary, ";");
+        SET response_summary = CONCAT(response_summary, track_summary, "\n ");
     END LOOP;
     CLOSE result_cursor;
 	SELECT
-		concat(r.album_name, " (", r.release_date, "): ") INTO album_summary
-		FROM record_albums r
-		WHERE r.album_id = album_id;
+		concat(
+			r.album_name, "\n ",
+			"Perfomed by: ", a.artist_name, "\n ",
+            "Produced by: ", l.record_label_name, "\n ",
+			"Released   : ", r.release_date, "\n "
+            ) INTO album_summary
+		FROM record_albums r, record_artists a, record_labels l
+		WHERE r.album_id = album_id and a.artist_id = r.artist_id and l.record_label_id = r.record_label_id;
 	SET response_summary = CONCAT(album_summary, response_summary);
     RETURN response_summary;
 END //
