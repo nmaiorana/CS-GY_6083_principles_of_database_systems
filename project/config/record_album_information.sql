@@ -213,6 +213,18 @@ CREATE TRIGGER cleanup_artists BEFORE DELETE ON record_artists
 	END //
 DELIMITER ;
 
+# Trigger to cleanup albums when deleted
+DROP TRIGGER IF EXISTS cleanup_tracks;
+
+DELIMITER //
+CREATE TRIGGER cleanup_tracks BEFORE DELETE ON record_albums
+	FOR EACH ROW
+    BEGIN
+		DELETE FROM record_tracks t WHERE t.album_id = OLD.album_id;
+        DELETE FROM record_sales s WHERE s.album_id = OLD.album_id;
+	END //
+DELIMITER ;
+
 
 # Inserting data into the tables
 
