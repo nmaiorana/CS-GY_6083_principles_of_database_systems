@@ -12,7 +12,7 @@ class RecordGenre:
     genre_description: str
 
     @staticmethod
-    def create(genre_name, genre_description):
+    def create(genre_name: str, genre_description: str) -> 'RecordGenre':
         add_genre = ("INSERT INTO record_genres "
                      "(genre_name, genre_description) "
                      "VALUES (%s, %s)")
@@ -21,7 +21,8 @@ class RecordGenre:
             with conn.cursor() as cur:
                 cur.execute(add_genre, data_genre)
                 conn.commit()
-        return RecordGenre.read_by_name(genre_name)
+                genre_id = cur.lastrowid
+        return RecordGenre.read(genre_id)
 
     @staticmethod
     def read_all() -> list:
@@ -34,7 +35,7 @@ class RecordGenre:
                 return rows
 
     @staticmethod
-    def read(genre_id):
+    def read(genre_id: int) -> 'RecordGenre':
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_genres WHERE genre_id = {genre_id}")
@@ -44,7 +45,7 @@ class RecordGenre:
                 return RecordGenre(result[0], result[1], result[2])
 
     @staticmethod
-    def read_by_name(genre_name):
+    def read_by_name(genre_name: str) -> 'RecordGenre':
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_genres WHERE genre_name = '{genre_name}'")
@@ -54,7 +55,7 @@ class RecordGenre:
                 return RecordGenre(result[0], result[1], result[2])
 
     @staticmethod
-    def delete_by_name(genre_name):
+    def delete_by_name(genre_name: str):
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 delete_statement = f"DELETE FROM record_genres WHERE genre_name = '{genre_name}'"

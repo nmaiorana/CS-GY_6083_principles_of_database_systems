@@ -11,7 +11,7 @@ class RecordArtist:
     artist_name: str
 
     @staticmethod
-    def create(artist_name):
+    def create(artist_name: str) -> 'RecordArtist':
         add_artist = ("INSERT INTO record_artists "
                       "(artist_name) "
                       "VALUES (%s)")
@@ -20,7 +20,8 @@ class RecordArtist:
             with conn.cursor() as cur:
                 cur.execute(add_artist, data_artist)
                 conn.commit()
-        return RecordArtist.read_by_name(artist_name)
+                artist_id = cur.lastrowid
+        return RecordArtist.read(artist_id)
 
     @staticmethod
     def read_all() -> list:
@@ -33,7 +34,7 @@ class RecordArtist:
                 return rows
 
     @staticmethod
-    def read(artist_id):
+    def read(artist_id: int) -> 'RecordArtist':
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_artists WHERE artist_id = {artist_id}")
@@ -43,7 +44,7 @@ class RecordArtist:
                 return RecordArtist(result[0], result[1])
 
     @staticmethod
-    def read_by_name(artist_name):
+    def read_by_name(artist_name: str) -> 'RecordArtist':
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_artists WHERE artist_name = '{artist_name}'")
@@ -53,7 +54,7 @@ class RecordArtist:
                 return RecordArtist(result[0], result[1])
 
     @staticmethod
-    def delete_by_name(artist_name):
+    def delete_by_name(artist_name: str):
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 delete_statement = f"DELETE FROM record_artists WHERE artist_name = '{artist_name}'"

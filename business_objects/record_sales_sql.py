@@ -14,7 +14,7 @@ class RecordSales:
     unit_sale_price: float
 
     @staticmethod
-    def create(album_id, sale_date, sale_quantity, unit_sale_price):
+    def create(album_id: int, sale_date: str, sale_quantity: int, unit_sale_price: float) -> 'RecordSales':
         add_sale = ("INSERT INTO record_sales "
                     "(album_id, sale_date, sale_quantity, unit_sale_price) "
                     "VALUES (%s, %s, %s, %s)")
@@ -37,7 +37,7 @@ class RecordSales:
                 return rows
 
     @staticmethod
-    def read(sale_id):
+    def read(sale_id: int) -> 'RecordSales':
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_sales WHERE sale_id = {sale_id}")
@@ -47,7 +47,7 @@ class RecordSales:
                 return RecordSales(result[0], result[1], result[2], result[3], result[4])
 
     @staticmethod
-    def read_by_album_id(album_id):
+    def read_by_album_id(album_id: int) -> list:
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_sales WHERE album_id = {album_id}")
