@@ -86,9 +86,6 @@ class RecordLabelsTest(unittest.TestCase):
         self.assertEqual(new_record_label.record_label_name, record_label.record_label_name)
         self.assertNotEqual(test_label_name, record_label.record_label_name)
         self.assertEqual(test_update_label_name, record_label.record_label_name)
-        RecordLabel.delete_by_name(test_update_label_name)
-        record_label = RecordLabel.read_by_name(test_update_label_name)
-        self.assertIsNone(record_label)
 
     def test_delete(self):
         new_record_label = RecordLabel.create(record_label_name=test_label_name)
