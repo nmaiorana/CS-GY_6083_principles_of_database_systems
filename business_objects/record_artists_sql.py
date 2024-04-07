@@ -4,6 +4,8 @@
 import dataclasses
 import tools.db_utils as dbu
 
+from business_objects.group_members_sql import GroupMember
+from business_objects.members_to_artists_sql import MembersToArtists
 
 @dataclasses.dataclass
 class RecordArtist:
@@ -78,3 +80,9 @@ class RecordArtist:
                 data = (self.artist_id,)
                 cursor.execute(delete_statement, data)
                 conn.commit()
+
+    def add_member(self, artist: GroupMember, from_date: str, to_date: str):
+        MembersToArtists.create_by_ref(artist, self, from_date, to_date)
+
+    def members(self) -> list:
+        return MembersToArtists.read_members(self.artist_id)
