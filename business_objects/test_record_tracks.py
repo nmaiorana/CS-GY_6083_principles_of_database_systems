@@ -93,18 +93,6 @@ class RecordTracksTest(unittest.TestCase):
         self.assertEqual(self.test_track_number, record_track.track_number)
         self.assertEqual(self.test_record_genre.genre_id, record_track.genre_id)
 
-    def test_create_by_ref(self):
-        record_track = RecordTrack.create_by_ref(album=self.test_record_album,
-                                                 track_name=self.test_track_name,
-                                                 track_number=self.test_track_number,
-                                                 genre=self.test_record_genre)
-        self.assertIsNotNone(record_track)
-        self.assertIsNotNone(record_track.track_id)
-        self.assertEqual(self.test_record_album.album_id, record_track.album_id)
-        self.assertEqual(self.test_track_name, record_track.track_name)
-        self.assertEqual(self.test_track_number, record_track.track_number)
-        self.assertEqual(self.test_record_genre.genre_id, record_track.genre_id)
-
     def test_update(self):
         record_track = RecordTrack.create(album_id=self.test_record_album.album_id,
                                           track_name=self.test_track_name,
@@ -128,5 +116,14 @@ class RecordTracksTest(unittest.TestCase):
                                           track_number=self.test_track_number,
                                           genre_id=self.test_record_genre.genre_id)
         record_track.delete()
+        test_record = RecordTrack.read(record_track.track_id)
+        self.assertIsNone(test_record)
+
+    def test_delete_by_album_id(self):
+        record_track = RecordTrack.create(album_id=self.test_record_album.album_id,
+                                          track_name=self.test_track_name,
+                                          track_number=self.test_track_number,
+                                          genre_id=self.test_record_genre.genre_id)
+        RecordTrack.delete_by_album_id(self.test_record_album.album_id)
         test_record = RecordTrack.read(record_track.track_id)
         self.assertIsNone(test_record)

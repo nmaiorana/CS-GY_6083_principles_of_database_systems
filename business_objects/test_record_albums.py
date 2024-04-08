@@ -4,6 +4,7 @@ from business_objects.record_album_sql import RecordAlbum
 from business_objects.record_artists_sql import RecordArtist
 from business_objects.record_genres_sql import RecordGenre
 from business_objects.record_labels_sql import RecordLabel
+from business_objects.record_tracks_sql import RecordTrack
 
 
 class RecordAlbumsTest(unittest.TestCase):
@@ -31,6 +32,7 @@ class RecordAlbumsTest(unittest.TestCase):
                 conn.commit()
 
     def tearDown(self):
+        RecordTrack.delete_by_name(self.test_album_name, 1)
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 delete_statement = "DELETE FROM record_albums WHERE album_name = %(album_name)s "
@@ -142,3 +144,13 @@ class RecordAlbumsTest(unittest.TestCase):
         record_album.delete()
         deleted_record = RecordAlbum.read(record_album.album_id)
         self.assertIsNone(deleted_record)
+
+    def test_add_track(self):
+        record_album = RecordAlbum.create(album_name=self.test_album_name, release_date='2021-01-01')
+        test_record = record_album.add_track(track_name='Test Track', track_number=1, genre_id=self.test_record_genre.genre_id)
+        test_track = record_album.get_tracks()[0]
+        self.assertIsNotNone(test_track)
+        self.assertEqual(test_track.album_id, record_album.album_id)
+        self.assertEqual(test_track.track_name, 'Test Track')
+        self.assertEqual(test_track.track_number, 1)
+        self.assertEqual(test_track.genre_id, self.test_record_genre.genre_id)

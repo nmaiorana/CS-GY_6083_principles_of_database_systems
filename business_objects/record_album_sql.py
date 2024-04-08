@@ -6,6 +6,7 @@ import tools.db_utils as dbu
 from business_objects.record_artists_sql import RecordArtist
 from business_objects.record_genres_sql import RecordGenre
 from business_objects.record_labels_sql import RecordLabel
+from business_objects.record_tracks_sql import RecordTrack
 
 
 @dataclasses.dataclass
@@ -118,3 +119,9 @@ class RecordAlbum:
                 delete_statement = "DELETE FROM record_albums WHERE album_id = %s"
                 cursor.execute(delete_statement, (self.album_id,))
                 conn.commit()
+
+    def add_track(self, track_name: str, track_number: int, genre_id: int) -> RecordTrack:
+        return RecordTrack.create(self.album_id, track_name, track_number, genre_id, )
+
+    def get_tracks(self) -> list:
+        return RecordTrack.read_by_album_id(self.album_id)

@@ -4,7 +4,6 @@
 import dataclasses
 from tools import db_utils as dbu
 
-from business_objects.record_album_sql import RecordAlbum
 from business_objects.record_genres_sql import RecordGenre
 
 
@@ -45,10 +44,6 @@ class RecordTrack:
 
         print(f'Created track_id: {track_id}')
         return RecordTrack.read(track_id)
-
-    @staticmethod
-    def create_by_ref(album: RecordAlbum, track_name: str, track_number: int, genre: 'RecordGenre') -> 'RecordTrack':
-        return RecordTrack.create_by_name(album.album_name, track_name, track_number, genre.genre_name)
 
     @staticmethod
     def read_all() -> list:
@@ -107,6 +102,14 @@ class RecordTrack:
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 delete_statement = f"DELETE FROM record_tracks WHERE album_id = (SELECT album_id FROM record_albums WHERE album_name = '{album_name}') AND track_name = '{track_name}'"
+                cursor.execute(delete_statement)
+                conn.commit()
+
+    @staticmethod
+    def delete_by_album_id(album_id: int):
+        with dbu.get_connector() as conn:
+            with conn.cursor() as cursor:
+                delete_statement = f"DELETE FROM record_tracks WHERE album_id = {album_id}"
                 cursor.execute(delete_statement)
                 conn.commit()
 
