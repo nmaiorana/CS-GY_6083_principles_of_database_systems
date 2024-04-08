@@ -76,12 +76,6 @@ class MembersToArtistsTest(unittest.TestCase):
         test_member_to_artist = MembersToArtists.read(member_to_artist.members_to_artists_id)
         self.assertIsNone(test_member_to_artist)
 
-    def test_delete_by_artist(self):
-        member_to_artist = MembersToArtists.create(self.test_group_member.member_id, self.test_record_artist.artist_id, '2021-01-01', '2021-12-31')
-        MembersToArtists.delete_by_artist(self.test_record_artist)
-        test_member_to_artist = MembersToArtists.read(member_to_artist.members_to_artists_id)
-        self.assertIsNone(test_member_to_artist)
-
     def test_update(self):
         member_to_artist = MembersToArtists.create(self.test_group_member.member_id, self.test_record_artist.artist_id, '2021-01-01', '2021-12-31')
         member_to_artist.member_from_date = '2021-01-02'

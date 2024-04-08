@@ -4,9 +4,6 @@
 import dataclasses
 from tools import db_utils as dbu
 
-from business_objects.group_members_sql import GroupMember
-from business_objects.record_artists_sql import RecordArtist
-
 
 @dataclasses.dataclass
 class MembersToArtists:
@@ -28,10 +25,6 @@ class MembersToArtists:
                 conn.commit()
                 member_id = cur.lastrowid
         return MembersToArtists.read(member_id)
-
-    @staticmethod
-    def create_by_ref(member: GroupMember, artist: RecordArtist, member_from_date: str, member_to_date: str) -> 'MembersToArtists':
-        return MembersToArtists.create(member.member_id, artist.artist_id, member_from_date, member_to_date)
 
     @staticmethod
     def read_all() -> list:
@@ -70,10 +63,6 @@ class MembersToArtists:
                 delete_statement = f"DELETE FROM members_to_artists WHERE artist_id = {artist_id}"
                 cursor.execute(delete_statement)
                 conn.commit()
-
-    @staticmethod
-    def delete_by_artist(artist: RecordArtist):
-        MembersToArtists.delete_by_artist_id(artist.artist_id)
 
     def update(self):
         with dbu.get_connector() as conn:

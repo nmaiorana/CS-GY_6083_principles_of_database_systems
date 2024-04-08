@@ -82,7 +82,7 @@ class RecordArtist:
                 conn.commit()
 
     def add_member(self, artist: GroupMember, from_date: str, to_date: str):
-        MembersToArtists.create_by_ref(artist, self, from_date, to_date)
+        MembersToArtists.create(artist.member_id, self.artist_id, from_date, to_date)
 
     def members(self) -> list:
         return MembersToArtists.read_members(self.artist_id)
