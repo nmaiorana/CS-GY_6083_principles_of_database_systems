@@ -123,5 +123,8 @@ class RecordAlbum:
     def add_track(self, track_name: str, track_number: int, genre_id: int) -> RecordTrack:
         return RecordTrack.create(self.album_id, track_name, track_number, genre_id, )
 
+    def remove_track(self, track_id: int):
+        RecordTrack.delete(track_id)
+
     def get_tracks(self) -> list:
         return RecordTrack.read_by_album_id(self.album_id)

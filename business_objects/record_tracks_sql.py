@@ -98,6 +98,14 @@ class RecordTrack:
                 return record_tracks
 
     @staticmethod
+    def delete_by_id(track_id: int):
+        with dbu.get_connector() as conn:
+            with conn.cursor() as cursor:
+                delete_statement = f"DELETE FROM record_tracks WHERE track_id = {track_id}"
+                cursor.execute(delete_statement)
+                conn.commit()
+
+    @staticmethod
     def delete_by_name(album_name: str, track_name: str):
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
@@ -106,10 +114,18 @@ class RecordTrack:
                 conn.commit()
 
     @staticmethod
-    def delete_by_album_id(album_id: int):
+    def delete_all_from_album_id(album_id: int):
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 delete_statement = f"DELETE FROM record_tracks WHERE album_id = {album_id}"
+                cursor.execute(delete_statement)
+                conn.commit()
+
+    @staticmethod
+    def delete_track_from_albumn(album_id: int, track_id: int):
+        with dbu.get_connector() as conn:
+            with conn.cursor() as cursor:
+                delete_statement = f"DELETE FROM record_tracks WHERE album_id = {album_id} AND track_id = {track_id}"
                 cursor.execute(delete_statement)
                 conn.commit()
 

@@ -70,7 +70,8 @@ CREATE TABLE RECORD_TRACKS (
     genre_id int,
     PRIMARY KEY (track_id),
     FOREIGN KEY (album_id) REFERENCES RECORD_ALBUMS(album_id),
-    FOREIGN KEY (genre_id) REFERENCES RECORD_GENRES(genre_id)
+    FOREIGN KEY (genre_id) REFERENCES RECORD_GENRES(genre_id),
+    UNIQUE (album_id, track_number)
 );
 
 CREATE TABLE RECORD_SALES (
@@ -129,6 +130,7 @@ CREATE VIEW band_members AS
 # Stored Procedures
 
 # Stored Procedure to count the number of record_sales
+DROP PROCEDURE IF EXISTS count_record_sales;
 DELIMITER //
 CREATE PROCEDURE count_record_sales(IN album_id INT, OUT sales_count INT)
 BEGIN
@@ -158,7 +160,7 @@ DELIMITER ;
 # Functions
 
 # Function to summarize an album and all it's tracks
-
+DROP FUNCTION IF EXISTS album_summary;
 DELIMITER //
 CREATE FUNCTION album_summary (album_id int) RETURNS varchar(600)
 	READS SQL DATA

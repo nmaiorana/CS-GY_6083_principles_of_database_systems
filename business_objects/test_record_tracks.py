@@ -119,11 +119,41 @@ class RecordTracksTest(unittest.TestCase):
         test_record = RecordTrack.read(record_track.track_id)
         self.assertIsNone(test_record)
 
-    def test_delete_by_album_id(self):
+    def test_delete_by_id(self):
         record_track = RecordTrack.create(album_id=self.test_record_album.album_id,
                                           track_name=self.test_track_name,
                                           track_number=self.test_track_number,
                                           genre_id=self.test_record_genre.genre_id)
-        RecordTrack.delete_by_album_id(self.test_record_album.album_id)
+        RecordTrack.delete_by_id(record_track.track_id)
         test_record = RecordTrack.read(record_track.track_id)
         self.assertIsNone(test_record)
+
+    def test_delete_all_from_album_id(self):
+        record_track_1 = RecordTrack.create(album_id=self.test_record_album.album_id,
+                                          track_name=self.test_track_name +' 1',
+                                          track_number=self.test_track_number,
+                                          genre_id=self.test_record_genre.genre_id)
+        record_track_2 = RecordTrack.create(album_id=self.test_record_album.album_id,
+                                          track_name=self.test_track_name +' 2',
+                                          track_number=self.test_track_number + 1,
+                                          genre_id=self.test_record_genre.genre_id)
+        RecordTrack.delete_all_from_album_id(self.test_record_album.album_id)
+        test_record = RecordTrack.read(record_track_1.track_id)
+        self.assertIsNone(test_record)
+        test_record = RecordTrack.read(record_track_2.track_id)
+        self.assertIsNone(test_record)
+
+    def test_delete_track_from_album(self):
+        record_track_1 = RecordTrack.create(album_id=self.test_record_album.album_id,
+                                          track_name=self.test_track_name + ' 1',
+                                          track_number=self.test_track_number,
+                                          genre_id=self.test_record_genre.genre_id)
+        record_track_2 = RecordTrack.create(album_id=self.test_record_album.album_id,
+                                          track_name=self.test_track_name + ' 2',
+                                          track_number=self.test_track_number + 1,
+                                          genre_id=self.test_record_genre.genre_id)
+        RecordTrack.delete_track_from_albumn(self.test_record_album.album_id, record_track_1.track_id)
+        test_record = RecordTrack.read(record_track_1.track_id)
+        self.assertIsNone(test_record)
+        test_record = RecordTrack.read(record_track_2.track_id)
+        self.assertIsNotNone(test_record)
