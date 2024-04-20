@@ -35,6 +35,7 @@ class RecordGenreUI:
         self.genre_id = None
         self.create_widgets()
         self.root.mainloop()
+
     def create_widgets(self):
         self.optionMenu = OptionMenu(self.root, self.genre_selected, *self.genre_names, command=lambda option: self.select_genre(option))
         self.optionMenu.grid(row=0, column=0)

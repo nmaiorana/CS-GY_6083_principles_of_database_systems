@@ -201,6 +201,48 @@ BEGIN
 END //
 DELIMITER ;
 
+# Function to summarize an band members for an artist
+DROP FUNCTION IF EXISTS band_summary;
+DELIMITER //
+CREATE FUNCTION band_summary (artist_id int) RETURNS varchar(600)
+	READS SQL DATA
+BEGIN
+	DECLARE done int default false;
+    DECLARE member_summary varchar(400);
+	DECLARE band_summary varchar(200);
+    DECLARE response_summary varchar(600);
+	DECLARE result_cursor CURSOR FOR
+		SELECT
+			concat(" ", group_members.member_name,
+				   " (", group_members.member_country, ")", 
+				   " from: ",  members_to_artists.member_from_date, 
+				   " till: ", members_to_artists.member_to_date) AS member_summary
+			FROM
+				record_artists
+			JOIN members_to_artists ON record_artists.artist_id = members_to_artists.artist_id
+			JOIN group_members ON members_to_artists.member_id = group_members.member_id
+			WHERE record_artists.artist_id = artist_id;
+	DECLARE CONTINUE HANDLER FOR not found SET done = true;
+	SET band_summary = "";
+    SET response_summary = "";
+	OPEN result_cursor;
+	read_loop: LOOP
+		FETCH result_cursor INTO member_summary;
+        IF done THEN
+			LEAVE read_loop;
+		END IF;
+        SET response_summary = CONCAT(response_summary, member_summary, "\n ");
+    END LOOP;
+    CLOSE result_cursor;
+	SELECT
+		concat(a.artist_name, " - Band Members: \n ") INTO band_summary
+		FROM record_artists a
+		WHERE a.artist_id = artist_id;
+	SET response_summary = CONCAT(band_summary, response_summary);
+    RETURN response_summary;
+END //
+DELIMITER ;
+
 # Triggers
 
 # Trigger to cleanup artists when deleted

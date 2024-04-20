@@ -78,6 +78,16 @@ class RecordArtistsTest(unittest.TestCase):
         test_record = RecordArtist.read(record_artist.artist_id)
         self.assertIsNone(test_record)
 
+    def test_delete_by_name(self):
+        record_artist = RecordArtist.create(artist_name=test_artist_name)
+        test_record_artist = RecordArtist.read_by_name(test_artist_name)
+        self.assertIsNotNone(test_record_artist)
+        self.assertEqual(test_record_artist.artist_name, test_artist_name)
+        self.assertEqual(test_record_artist.artist_id, record_artist.artist_id)
+        RecordArtist.delete_by_name(test_artist_name)
+        test_record = RecordArtist.read(record_artist.artist_id)
+        self.assertIsNone(test_record)
+
     def test_add_member(self):
         record_artist = RecordArtist.create(artist_name=test_artist_name)
         group_member = GroupMember.create('Test Member', 'USA', '2021-01-01')
