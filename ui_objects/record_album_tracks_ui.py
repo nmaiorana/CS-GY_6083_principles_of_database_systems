@@ -14,16 +14,13 @@ from business_objects.record_labels_sql import RecordLabel
 from business_objects.record_tracks_sql import RecordTrack
 
 
-class RecordAlbumUI:
-    def __init__(self):
-        self.album_summary = None
-        self.album_view = None
+class RecordTracksUI:
+    def __init__(self, window, album):
         self.track_view = None
-        self.albums = []
         self.tracks = []
-        self.selected_album = None
+        self.selected_album = album
         self.selected_track = None
-        self.primary = Tk()
+        self.primary = window
         self.primary.geometry("1000x400")
         self.primary.title("Record Album Manager")
 
@@ -32,7 +29,7 @@ class RecordAlbumUI:
         self.primary.mainloop()
 
     def create_new_album(self):
-        self.edit_album()
+        self.edit_album(None)
 
     def remove_albums(self):
         for item in self.album_view.get_children():
@@ -187,18 +184,13 @@ class RecordAlbumUI:
         cancel_button.config(width=button_width)
         cancel_button.grid(row=5, column=3, padx=0, pady=1)
 
-        self.album_summary = Text(child, height=20, width=60)
-        self.album_summary.grid(row=6, column=0, padx=0, pady=1)
-        self.update_album_summary()
+        album_summary = Text(child, height=20, width=60)
+        album_summary.grid(row=6, column=0, padx=0, pady=1)
+        if self.selected_album is not None:
+            album_summary.insert(INSERT, self.selected_album.summary())
+        album_summary.config(state=DISABLED)
 
         load_form = False
-
-    def update_album_summary(self):
-        self.album_summary.config(state=NORMAL)
-        self.album_summary.delete(1.0, END)
-        if self.selected_album is not None:
-            self.album_summary.insert(INSERT, self.selected_album.summary())
-        self.album_summary.config(state=DISABLED)
 
     def create_album(self, child, album_name, release_date, artist_name, genre_name, record_label_name):
         album = RecordAlbum.create_by_name(album_name=album_name, release_date=release_date, artist_name=artist_name,
@@ -236,7 +228,7 @@ class RecordAlbumUI:
 
     def remove_tracks(self):
         for item in self.track_view.get_children():
-            self.track_view.delete(item)
+            self.album_view.delete(item)
 
     def load_tracks(self):
         self.remove_tracks()
@@ -244,24 +236,20 @@ class RecordAlbumUI:
         self.tracks = self.selected_album.get_tracks()
         index = 0
         for track in self.tracks:
-            self.track_view.insert("", "end", values=(track.track_name, track.track_number, track.genre_name()),
+            self.track_view.insert("", "end", values=(track.track_name, track.track_number, track.genre_id),
                                    iid=index)
             index += 1
 
     def build_track_window(self, album_entry):
-        child = Toplevel(album_entry)
-        child.geometry("800x600")
-        child.title(f"Tracks: {self.selected_album.album_name}")
-        btn_new_track = Button(child, text="New Track", padx=2, pady=3,
-                               command=lambda: self.create_new_track(child))
-        btn_new_track.grid(row=0, column=0, sticky="w")
-        btn_cancel_track_window = Button(child, text="Cancel", command=lambda: self.cancel_track_window(child))
-        btn_cancel_track_window.grid(row=0, column=1, sticky="w")
-
-        self.track_view = ttk.Treeview(child, columns=("track_name", "track_number", "genre_name"),
+        self.track_view = ttk.Treeview(self.primary, columns=("track_name", "track_number", "genre_name"),
                                        show="headings",
                                        height="10")
         self.track_view.grab_set()
+
+        btn_new_track = Button(self.track_view, text="New Track", padx=2, pady=3, command=lambda: self.create_new_track())
+        btn_new_track.grid(row=0, column=0, sticky="w")
+        btn_cancel_track_window = Button(self.track_view, text="Cancel", command=lambda: self.cancel_track_window())
+        btn_cancel_track_window.grid(row=0, column=1, sticky="w")
 
         self.track_view.grid(row=1, column=0, rowspan=10, columnspan=3)
         self.track_view.heading("track_name", text="Track Name", anchor="w")
@@ -275,120 +263,33 @@ class RecordAlbumUI:
         self.track_view.bind("<ButtonRelease>", self.select_track)
         self.load_tracks()
 
-    def create_new_track(self, child):
-        self.edit_track()
-
-    def cancel_track_window(self, child):
-        child.grab_release()
-        child.destroy()
-        child.update()
+    def cancel_track_window(self):
+        self.track_view.grab_release()
+        self.track_view.destroy()
+        self.track_view.update()
 
     def select_track(self, event):
         selected_item = int(self.track_view.selection()[0])
-        self.selected_track = self.tracks[selected_item]
+        selected_track = self.tracks[selected_item]
         self.edit_track()
 
     def edit_track(self):
-        track_name = StringVar()
-        track_number = IntVar()
-        genre_selected = StringVar()
-        if self.selected_track is None:
-            frame_title = "New Track"
-            genre_selected.set("Select Genre")
-        else:
-            frame_title = "Edit Track"
-            track_name.set(self.selected_track.track_name)
-            track_number.set(self.selected_track.track_number)
-            genre_selected.set(self.selected_track.genre_name())
         track_child = Toplevel(self.track_view)
         track_child.title("Edit Tracks")
-        track_child.geometry("600x250")
+        track_child.geometry("800x600")
         track_child.grab_set()
 
-        label_width = 20
-        input_width = 60
-        button_width = 10
+        track_frame = LabelFrame(track_child, text="Enter/Edit track information", padx=5, pady=5)
+        track_frame.grid(row=0, rowspan=6, column=0)
 
-        input_frame = LabelFrame(track_child, text="Enter/Edit track information", padx=5, pady=5)
-        input_frame.grid(row=0, rowspan=6, column=0)
-
-        track_name_label = Label(input_frame, text="Track Name", width=20, height=2, anchor="w", relief="ridge")
-        track_number_label = Label(input_frame, text="Track Number", width=20, height=2, anchor="w", relief="ridge")
-        genre_label = Label(input_frame, text="Genre", width=label_width, height=2, anchor="w", relief="ridge")
-
-        track_name_label.grid(row=0, column=0, padx=1, pady=0)
-        track_number_label.grid(row=1, column=0, padx=1, pady=0)
-        genre_label.grid(row=2, column=0, padx=1, pady=0)
-
-        track_name_entry = Entry(input_frame, textvariable=track_name, width=input_width)
-        track_number_entry = Entry(input_frame, textvariable=track_number, width=input_width)
-        genre_option_menu = OptionMenu(input_frame,
-                                       genre_selected,
-                                       *[genre.genre_name for genre in RecordGenre.read_all()])
-        genre_option_menu.config(width=input_width)
-
-        track_name_entry.grid(row=0, column=1, padx=1, pady=0)
-        track_number_entry.grid(row=1, column=1, padx=1, pady=0)
-        genre_option_menu.grid(row=2, column=1, padx=1, pady=0)
-
-        if self.selected_track is not None:
-            update_track_button = Button(input_frame, text="Update",
-                                         command=lambda: self.update_track(track_child,
-                                                                           track_name.get(),
-                                                                           track_number.get(),
-                                                                           genre_selected.get()))
-            update_track_button.config(width=button_width)
-            delete_track_button = Button(input_frame, text="Delete",
-                                         command=lambda: self.delete_track(track_child))
-            delete_track_button.config(width=button_width)
-            update_track_button.grid(row=4, column=0, padx=0, pady=1)
-            delete_track_button.grid(row=4, column=2, padx=0, pady=1)
-        else:
-            add_track_button = Button(input_frame, text="Add",
-                                      command=lambda: self.add_track(track_child,
-                                                                     track_name.get(),
-                                                                     track_number.get(),
-                                                                     genre_selected.get()))
-            add_track_button.config(width=button_width)
-            add_track_button.grid(row=4, column=0, padx=0, pady=1)
-
-        cancel_button = Button(input_frame, text="Cancel", command=lambda: self.cancel_track(track_child))
-        cancel_button.config(width=button_width)
-        cancel_button.grid(row=5, column=3, padx=0, pady=1)
-
-    def update_track(self, child, track_name, track_number, genre_name):
-        self.selected_track.track_name = track_name
-        self.selected_track.track_number = track_number
-        self.selected_track.genre_id = RecordGenre.read_by_name(genre_name).genre_id
-        self.selected_track.update()
-        self.load_tracks()
-        child.grab_release()
-        child.destroy()
-        child.update()
-        self.update_album_summary()
-
-    def add_track(self, child, track_name, track_number, genre_name):
-        self.selected_album.add_track(track_name=track_name, track_number=track_number, genre_name=genre_name)
-        self.load_tracks()
-        child.grab_release()
-        child.destroy()
-        child.update()
-        self.update_album_summary()
-
-    def delete_track(self, child):
-        self.selected_track.delete()
-        self.load_tracks()
-        child.grab_release()
-        child.destroy()
-        child.update()
-        self.update_album_summary()
-
-    def cancel_track(self, child):
-        self.selected_track = None
-        child.grab_release()
-        child.destroy()
-        child.update()
-        self.update_album_summary()
+        track_name_label = Label(track_frame, text="Track Name", width=20, height=2, anchor="w", relief="ridge")
+        track_selected = StringVar()
+        track_selected.set("Select Track")
+        track_option_menu = OptionMenu(track_frame,
+                                       track_selected,
+                                       *[track.track_name for track in self.selected_album.get_tracks()])
+        track_option_menu.config(width=60)
+        track_option_menu.grid(row=0, column=1, padx=1, pady=0)
 
 
 if __name__ == '__main__':

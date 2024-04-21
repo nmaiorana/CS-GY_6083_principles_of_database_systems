@@ -154,3 +154,23 @@ class RecordAlbumsTest(unittest.TestCase):
         self.assertEqual(test_track.track_name, 'Test Track')
         self.assertEqual(test_track.track_number, 1)
         self.assertEqual(test_track.genre_id, self.test_record_genre.genre_id)
+
+    def test_remove_track(self):
+        record_album = RecordAlbum.create(album_name=self.test_album_name, release_date='2021-01-01')
+        test_track = record_album.add_track(track_name='Test Track', track_number=1, genre_id=self.test_record_genre.genre_id)
+        print(f'test_track: {test_track}')
+        record_album.remove_track(test_track.track_id)
+        test_tracks = record_album.get_tracks()
+        self.assertEqual(len(test_tracks), 0)
+
+    def test_summary(self):
+        record_album = RecordAlbum.create_by_ref(album_name=self.test_album_name,
+                                                  release_date='2021-01-01',
+                                                  artist=self.test_record_artist,
+                                                  genre=self.test_record_genre,
+                                                  label=self.test_record_label)
+        record_album.add_track(track_name='Test Track', track_number=1, genre_id=self.test_record_genre.genre_id)
+        summary = record_album.summary()
+        self.assertIsNotNone(summary)
+
+

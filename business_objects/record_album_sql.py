@@ -124,7 +124,21 @@ class RecordAlbum:
         return RecordTrack.create(self.album_id, track_name, track_number, genre_id, )
 
     def remove_track(self, track_id: int):
-        RecordTrack.delete(track_id)
+        RecordTrack.delete_by_id(track_id)
 
     def get_tracks(self) -> list:
-        return RecordTrack.read_by_album_id(self.album_id)
+        return RecordTrack.read_all_by_album_id(self.album_id)
+
+    def artist_name(self) -> str:
+        return RecordArtist.read(self.artist_id).artist_name
+    def genre_name(self) -> str:
+        return RecordGenre.read(self.genre_id).genre_name
+
+    def record_label_name(self) -> str:
+        return RecordLabel.read(self.record_label_id).record_label_name
+
+    def summary(self):
+        with dbu.get_connector() as conn:
+            with conn.cursor() as cur:
+                cur.execute(f'select album_summary(%s)', (self.album_id,))
+                return cur.fetchone()[0]

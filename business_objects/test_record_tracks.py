@@ -157,3 +157,23 @@ class RecordTracksTest(unittest.TestCase):
         self.assertIsNone(test_record)
         test_record = RecordTrack.read(record_track_2.track_id)
         self.assertIsNotNone(test_record)
+
+    def test_read_all_by_album_id(self):
+        record_track_1 = RecordTrack.create(album_id=self.test_record_album.album_id,
+                                          track_name=self.test_track_name + ' 1',
+                                          track_number=self.test_track_number,
+                                          genre_id=self.test_record_genre.genre_id)
+        record_track_2 = RecordTrack.create(album_id=self.test_record_album.album_id,
+                                          track_name=self.test_track_name + ' 2',
+                                          track_number=self.test_track_number + 1,
+                                          genre_id=self.test_record_genre.genre_id)
+        record_tracks = RecordTrack.read_all_by_album_id(self.test_record_album.album_id)
+        self.assertGreaterEqual(len(record_tracks), 2)
+
+
+    def test_genre_name(self):
+        record_track = RecordTrack.create(album_id=self.test_record_album.album_id,
+                                          track_name=self.test_track_name,
+                                          track_number=self.test_track_number,
+                                          genre_id=self.test_record_genre.genre_id)
+        self.assertEqual(self.test_record_genre.genre_name, record_track.genre_name())

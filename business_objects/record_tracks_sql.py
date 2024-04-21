@@ -77,7 +77,7 @@ class RecordTrack:
                 return RecordTrack(result[0], result[1], result[2], result[3], result[4])
 
     @staticmethod
-    def read_by_album_id(album_id: int) -> list:
+    def read_all_by_album_id(album_id: int) -> list:
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_tracks WHERE album_id = {album_id}")
@@ -140,8 +140,12 @@ class RecordTrack:
                 conn.commit()
 
     def delete(self):
+        print(f'Deleting track: {self}')
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 delete_statement = f"DELETE FROM record_tracks WHERE track_id = {self.track_id}"
                 cursor.execute(delete_statement)
                 conn.commit()
+
+    def genre_name(self) -> str:
+        return RecordGenre.read(self.genre_id).genre_name
