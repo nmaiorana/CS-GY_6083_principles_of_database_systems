@@ -27,7 +27,6 @@ class RecordTracksUI:
 
         self.build_track_window(self.primary)
         self.load_tracks()
-        self.primary.mainloop()
 
     def remove_tracks(self):
         for item in self.track_view.get_children():
@@ -62,7 +61,7 @@ class RecordTracksUI:
 
         self.track_view = ttk.Treeview(child, columns=("track_name", "track_number", "genre_name"),
                                        show="headings",
-                                       height="10")
+                                       height="20")
 
         self.track_view.grid(row=1, column=0, rowspan=10, columnspan=3)
         self.track_view.heading("track_name", text="Track Name", anchor="w")
@@ -214,4 +213,4 @@ class RecordTracksUI:
 
 if __name__ == '__main__':
     album = RecordAlbum.read_by_name("The Dark Side of the Moon")
-    RecordTracksUI(None, album)
+    RecordTracksUI(None, album).primary.mainloop()
