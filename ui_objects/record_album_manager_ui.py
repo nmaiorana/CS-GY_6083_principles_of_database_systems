@@ -177,7 +177,7 @@ class RecordAlbumUI:
 
         if self.selected_album is not None:
             album_name.set(self.selected_album.album_name)
-            release_date.set(self.selected_album.release_date)
+            release_date_entry.selection_set(self.selected_album.release_date)
             artist_name.set(self.selected_album.artist_name())
             genre_selected.set(self.selected_album.genre_name())
             record_label_name.set(self.selected_album.record_label_name())
