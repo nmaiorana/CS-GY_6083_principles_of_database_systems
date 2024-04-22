@@ -147,7 +147,7 @@ class RecordAlbumsTest(unittest.TestCase):
 
     def test_add_track(self):
         record_album = RecordAlbum.create(album_name=self.test_album_name, release_date='2021-01-01')
-        test_record = record_album.add_track(track_name='Test Track', track_number=1, genre_id=self.test_record_genre.genre_id)
+        test_record = record_album.add_track(track_name='Test Track', track_number=1, genre_name=self.test_record_genre.genre_name)
         test_track = record_album.get_tracks()[0]
         self.assertIsNotNone(test_track)
         self.assertEqual(test_track.album_id, record_album.album_id)
@@ -157,7 +157,7 @@ class RecordAlbumsTest(unittest.TestCase):
 
     def test_remove_track(self):
         record_album = RecordAlbum.create(album_name=self.test_album_name, release_date='2021-01-01')
-        test_track = record_album.add_track(track_name='Test Track', track_number=1, genre_id=self.test_record_genre.genre_id)
+        test_track = record_album.add_track(track_name='Test Track', track_number=1, genre_name=self.test_record_genre.genre_name)
         print(f'test_track: {test_track}')
         record_album.remove_track(test_track.track_id)
         test_tracks = record_album.get_tracks()
@@ -169,7 +169,7 @@ class RecordAlbumsTest(unittest.TestCase):
                                                   artist=self.test_record_artist,
                                                   genre=self.test_record_genre,
                                                   label=self.test_record_label)
-        record_album.add_track(track_name='Test Track', track_number=1, genre_id=self.test_record_genre.genre_id)
+        record_album.add_track(track_name='Test Track', track_number=1, genre_name=self.test_record_genre.genre_name)
         summary = record_album.summary()
         self.assertIsNotNone(summary)
 
