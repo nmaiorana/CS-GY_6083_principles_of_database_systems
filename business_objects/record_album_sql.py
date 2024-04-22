@@ -120,8 +120,9 @@ class RecordAlbum:
                 cursor.execute(delete_statement, (self.album_id,))
                 conn.commit()
 
-    def add_track(self, track_name: str, track_number: int, genre_id: int) -> RecordTrack:
-        return RecordTrack.create(self.album_id, track_name, track_number, genre_id, )
+    def add_track(self, track_name: str, track_number: int, genre_name: str) -> RecordTrack:
+        genre_id = RecordGenre.read_by_name(genre_name).genre_id
+        return RecordTrack.create(self.album_id, track_name, track_number, genre_id)
 
     def remove_track(self, track_id: int):
         RecordTrack.delete_by_id(track_id)
