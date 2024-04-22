@@ -32,7 +32,8 @@ class RecordAlbum:
         return RecordAlbum.read(album_id)
 
     @staticmethod
-    def create_by_id(album_name: str, release_date: str, artist_id: int, genre_id: int, record_label_id: int) -> 'RecordAlbum':
+    def create_by_id(album_name: str, release_date: str, artist_id: int, genre_id: int,
+                     record_label_id: int) -> 'RecordAlbum':
         add_album = ("INSERT INTO record_albums "
                      "(album_name, release_date, artist_id, genre_id, record_label_id) "
                      "VALUES (%s, %s, %s, %s, %s)")
@@ -45,8 +46,10 @@ class RecordAlbum:
         return RecordAlbum.read(album_id)
 
     @staticmethod
-    def create_by_ref(album_name: str, release_date: str, artist: RecordArtist, genre: RecordGenre, label: RecordLabel) -> 'RecordAlbum':
-        return RecordAlbum.create_by_id(album_name, release_date, artist.artist_id, genre.genre_id, label.record_label_id)
+    def create_by_ref(album_name: str, release_date: str, artist: RecordArtist, genre: RecordGenre,
+                      label: RecordLabel) -> 'RecordAlbum':
+        return RecordAlbum.create_by_id(album_name, release_date, artist.artist_id, genre.genre_id,
+                                        label.record_label_id)
 
     @staticmethod
     def create_by_name(album_name: str, release_date: str, artist_name: str, genre_name: str,
@@ -109,7 +112,8 @@ class RecordAlbum:
                                     "SET album_name = %s, release_date = %s, artist_id = %s, genre_id = %s, record_label_id = %s "
                                     "WHERE album_id = %s")
                 data_album = (
-                self.album_name, self.release_date, self.artist_id, self.genre_id, self.record_label_id, self.album_id)
+                    self.album_name, self.release_date, self.artist_id, self.genre_id, self.record_label_id,
+                    self.album_id)
                 cursor.execute(update_statement, data_album)
                 conn.commit()
 
@@ -132,6 +136,7 @@ class RecordAlbum:
 
     def artist_name(self) -> str:
         return RecordArtist.read(self.artist_id).artist_name
+
     def genre_name(self) -> str:
         return RecordGenre.read(self.genre_id).genre_name
 

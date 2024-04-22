@@ -453,3 +453,17 @@ INSERT INTO record_tracks (album_id, track_name, track_number, genre_id) VALUES
     ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'River', 9, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
     ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'The Longships', 10, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
     ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Na Laetha Geal M''ige', 11, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age'));
+    
+    
+# Adding more artists
+INSERT INTO record_artists (artist_name) VALUES
+    ('The Beatles'),
+    ('The Rolling Stones'),
+    ('Led Zeppelin'),
+    ('Queen'),
+    ('The Who'),
+    ('The Doors'),
+    ('The Eagles'),
+    ('U2'),
+    ('The Police'),
+    ('The Beach Boys');
