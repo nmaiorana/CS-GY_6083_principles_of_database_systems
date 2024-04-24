@@ -78,7 +78,7 @@ class RecordAlbum:
                 return rows
 
     @staticmethod
-    def read(album_id: int) -> 'RecordAlbum':
+    def read(album_id: int) -> 'RecordAlbum' | None:
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_albums WHERE album_id = {album_id}")
@@ -88,7 +88,7 @@ class RecordAlbum:
                 return RecordAlbum(result[0], result[1], result[2], result[3], result[4], result[5])
 
     @staticmethod
-    def read_by_name(album_name: str) -> 'RecordAlbum':
+    def read_by_name(album_name: str) -> 'RecordAlbum' | None:
         with dbu.get_connector() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM record_albums WHERE album_name = '{album_name}'")

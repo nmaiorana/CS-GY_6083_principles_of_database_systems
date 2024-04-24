@@ -331,21 +331,21 @@ INSERT INTO record_albums (album_name, release_date, artist_id, genre_id, record
      (SELECT record_label_id FROM record_labels WHERE record_label_name = 'Harvest Capitol Records'));
 
 INSERT INTO record_sales(album_id, sale_date, sale_quantity, unit_sale_price) VALUES
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1973-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1974-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1975-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1976-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1977-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1978-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1979-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1980-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1981-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1982-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1983-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1984-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1985-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1986-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1987-01-01', 1000000, 10.00);
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1973-01-01', 750000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1974-01-01', 1200000, 12.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1975-01-01', 500000, 12.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1976-01-01', 340000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1977-01-01', 276000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1978-01-01', 170000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1979-01-01', 125000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1980-01-01', 96000, 8.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1981-01-01', 70000, 8.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1982-01-01', 40000, 8.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1983-01-01', 23000, 8.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1984-01-01', 12000, 5.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1985-01-01', 4670, 5.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1986-01-01', 3400, 5.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), '1987-01-01', 800, 5.00);
 
 INSERT INTO record_tracks (album_id, track_name, track_number, genre_id) VALUES
     ((SELECT album_id FROM record_albums WHERE album_name = 'The Dark Side of the Moon'), 'Speak to Me', 1, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
@@ -385,18 +385,18 @@ INSERT INTO record_albums (album_name, release_date, artist_id, genre_id, record
      (SELECT record_label_id FROM record_labels WHERE record_label_name = 'Epic Records'));
 
 INSERT INTO record_sales(album_id, sale_date, sale_quantity, unit_sale_price) VALUES
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1976-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1977-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1978-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1979-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1980-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1981-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1982-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1983-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1984-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1985-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1986-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1987-01-01', 1000000, 10.00);
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1976-01-01', 120000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1977-01-01', 130000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1978-01-01', 200000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1979-01-01', 250000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1980-01-01', 175000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1981-01-01', 120000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1982-01-01', 75000, 7.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1983-01-01', 60000, 7.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1984-01-01', 20000, 7.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1985-01-01', 12000, 7.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1986-01-01', 5000, 5.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), '1987-01-01', 1200, 5.00);
 
 INSERT INTO record_tracks (album_id, track_name, track_number, genre_id) VALUES
     ((SELECT album_id FROM record_albums WHERE album_name = 'Boston'), 'More Than a Feeling', 1, (SELECT genre_id FROM record_genres WHERE genre_name = 'Rock')),
@@ -426,20 +426,19 @@ INSERT INTO record_albums (album_name, release_date, artist_id, genre_id, record
      (SELECT record_label_id FROM record_labels WHERE record_label_name = 'Warner Bros. Records'));
 
 INSERT INTO record_sales(album_id, sale_date, sale_quantity, unit_sale_price) VALUES
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1988-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1989-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1990-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1991-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1992-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1993-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1994-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1995-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1996-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1997-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1998-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1999-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '2000-01-01', 1000000, 10.00),
-    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '2001-01-01', 1000000, 10.00);
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1989-01-01', 300000, 15.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1990-01-01', 240000, 15.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1991-01-01', 200000, 15.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1992-01-01', 189000, 15.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1993-01-01', 150000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1994-01-01', 125000, 10.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1995-01-01', 80000, 8.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1996-01-01', 55000, 8.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1997-01-01', 30000, 8.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1998-01-01', 15000, 8.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '1999-01-01', 8000, 5.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '2000-01-01', 2300, 5.00),
+    ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), '2001-01-01', 1489, 5.00);
 
 INSERT INTO record_tracks (album_id, track_name, track_number, genre_id) VALUES
     ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Watermark', 1, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
@@ -453,8 +452,7 @@ INSERT INTO record_tracks (album_id, track_name, track_number, genre_id) VALUES
     ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'River', 9, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
     ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'The Longships', 10, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age')),
     ((SELECT album_id FROM record_albums WHERE album_name = 'Watermark'), 'Na Laetha Geal M''ige', 11, (SELECT genre_id FROM record_genres WHERE genre_name = 'New Age'));
-    
-    
+
 # Adding more artists
 INSERT INTO record_artists (artist_name) VALUES
     ('The Beatles'),
