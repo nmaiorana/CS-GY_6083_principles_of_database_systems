@@ -53,17 +53,17 @@ class RecordTracksUI:
         new_track_button = Button(child, text="New Track", padx=2, pady=3, command=lambda: self.create_new_track())
         new_track_button.grid(row=0, column=0, sticky="w")
         edit_track_button = Button(child, text="Edit Track", command=lambda: self.edit_selected_track())
-        edit_track_button.grid(row=0, column=1, sticky="w")
+        edit_track_button.grid(row=1, column=0, sticky="w")
         delete_track_button = Button(child, text="Delete Track", command=lambda: self.delete_selected_track())
-        delete_track_button.grid(row=0, column=2, sticky="w")
+        delete_track_button.grid(row=2, column=0, sticky="w")
         cancel_track_button = Button(child, text="Cancel", command=lambda: self.cancel_track_window(child))
-        cancel_track_button.grid(row=0, column=3, sticky="w")
+        cancel_track_button.grid(row=3, column=0, sticky="w")
 
         self.track_view = ttk.Treeview(child, columns=("track_name", "track_number", "genre_name"),
                                        show="headings",
                                        height="20")
 
-        self.track_view.grid(row=1, column=0, rowspan=10, columnspan=3)
+        self.track_view.grid(row=0, column=1, rowspan=10, columnspan=3)
         self.track_view.heading("track_name", text="Track Name", anchor="w")
         self.track_view.heading("track_number", text="Track Number", anchor="center")
         self.track_view.heading("genre_name", text="Genre", anchor="center")

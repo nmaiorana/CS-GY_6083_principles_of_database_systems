@@ -26,7 +26,7 @@ class RecordAlbumUI:
         self.selected_album = None
         self.selected_track = None
         self.primary = Tk()
-        self.primary.geometry("1000x400")
+        self.primary.geometry("1100x400")
         self.primary.title("Record Album Manager")
 
         self.build_main_window()
@@ -54,16 +54,16 @@ class RecordAlbumUI:
         new_button.grid(row=0, column=0, sticky="w")
 
         edit_button = Button(self.primary, text="Edit Album", command=lambda: self.edit_selected_album())
-        edit_button.grid(row=0, column=1, sticky="w")
+        edit_button.grid(row=1, column=0, sticky="w")
 
         delete_button = Button(self.primary, text="Delete Album", command=lambda: self.delete_selected_album(self.primary))
-        delete_button.grid(row=0, column=2, sticky="w")
+        delete_button.grid(row=2, column=0, sticky="w")
 
         self.album_view = ttk.Treeview(self.primary, columns=(
             "album_id", "album_name", "release_date", "artist_name", "gener_name", "record_label_name"),
                                        show="headings",
                                        height="10")
-        self.album_view.grid(row=1, column=0, rowspan=10, columnspan=6)
+        self.album_view.grid(row=0, column=1, rowspan=10, columnspan=6)
         self.album_view.heading("album_id", text="Album ID", anchor="w")
         self.album_view.heading("album_name", text="Album Name", anchor="center")
         self.album_view.heading("release_date", text="Release Date", anchor="center")
@@ -71,9 +71,9 @@ class RecordAlbumUI:
         self.album_view.heading("gener_name", text="Genre", anchor="center")
         self.album_view.heading("record_label_name", text="Label", anchor="center")
 
-        self.album_view.column("album_id", width=100)
+        self.album_view.column("album_id", width=50)
         self.album_view.column("album_name", width=300)
-        self.album_view.column("release_date", width=100)
+        self.album_view.column("release_date", width=100, anchor="center")
         self.album_view.column("artist_name", width=200)
         self.album_view.column("gener_name", width=100)
         self.album_view.column("record_label_name", width=200)
